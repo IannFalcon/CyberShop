@@ -16,7 +16,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    string query = "SELECT IdUsuario, Nombres, Apellidos, Correo, Clave, Reestablecer, Activo FROM USUARIO";
+                    string query = "SELECT IdUsuario, Nombres, Apellidos, Correo, Clave, Reestablecer, Activo FROM USUARIO WHERE Eliminado='No'";
 
                     SqlCommand cmd = new SqlCommand(query, cnx);
 
@@ -130,7 +130,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    SqlCommand cmd = new SqlCommand("DELETE TOP (1) FROM USUARIO WHERE IdUsuario = @id", cnx);
+                    SqlCommand cmd = new SqlCommand("UPDATE TOP (1) USUARIO SET Eliminado='Si' WHERE IdUsuario = @id", cnx);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.CommandType = CommandType.Text;
                     cnx.Open();
@@ -147,6 +147,44 @@ namespace CapaDatos
 
         }
 
+        public bool CambiarClave (int idusuario, string nuevaclave, out string Mensaje) 
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    SqlCommand cmd = new SqlCommand("update usuario set clave = @nuevaclave, reestablecer = 0 where idusuario = @id", cnx);
+                    cmd.Parameters.AddWithValue("@id", idusuario);
+                    cmd.Parameters.AddWithValue("@nuevaclave", nuevaclave);
+                    cmd.CommandType = CommandType.Text;
+                    cnx.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
+                }
+            } catch (Exception ex) { resultado = false; Mensaje = ex.Message; }
+            return resultado;
+        }
+
+        public bool ReestablecerClave(int idusuario, string clave, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    SqlCommand cmd = new SqlCommand("update usuario set clave = @clave, reestablecer = 1 where idusuario = @id", cnx);
+                    cmd.Parameters.AddWithValue("@id", idusuario);
+                    cmd.Parameters.AddWithValue("@clave", clave);
+                    cmd.CommandType = CommandType.Text;
+                    cnx.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0 ? true : false;
+                }
+            }
+            catch (Exception ex) { resultado = false; Mensaje = ex.Message; }
+            return resultado;
+        }
     }
 
 }
