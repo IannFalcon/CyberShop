@@ -16,7 +16,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    string query = "SELECT IdUsuario, Nombres, Apellidos, Correo, Clave, Reestablecer, Activo FROM USUARIO";
+                    string query = "SELECT IdUsuario, Nombres, Apellidos, Correo, Clave, Reestablecer, Activo FROM USUARIO WHERE Eliminado='No'";
 
                     SqlCommand cmd = new SqlCommand(query, cnx);
 
@@ -130,7 +130,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    SqlCommand cmd = new SqlCommand("DELETE TOP (1) FROM USUARIO WHERE IdUsuario = @id", cnx);
+                    SqlCommand cmd = new SqlCommand("UPDATE TOP (1) USUARIO SET Eliminado='Si' WHERE IdUsuario = @id", cnx);
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.CommandType = CommandType.Text;
                     cnx.Open();
