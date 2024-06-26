@@ -7,7 +7,7 @@
 <h2 class="mt-4">Categorias</h2>
 
 <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="index.html">Mantenimiento</a></li>
+    <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
     <li class="breadcrumb-item active">Categoria</li>
 </ol>
 
@@ -97,8 +97,7 @@
         var tabladata;
         var filaseleccionada;
 
-
-
+        // Listar categorias
         tabladata = $("#tabla_categoria").DataTable({
             responsive: true,
             ordering: true,
@@ -152,6 +151,7 @@
 
         }
 
+        // Boton editar
         $("#tabla_categoria tbody").on("click", '.btn-editar', function () {
 
             filaseleccionada = $(this).closest("tr");
@@ -162,6 +162,7 @@
 
         })
 
+        // Boton eliminar
         $("#tabla_categoria tbody").on("click", '.btn-eliminar', function () {
 
             var seleccionado = $(this).closest("tr");

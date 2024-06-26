@@ -485,6 +485,7 @@
     <Content Include="Views\Mantenimiento\Categoria.cshtml" />
     <Content Include="Views\Mantenimiento\Marca.cshtml" />
     <Content Include="Views\Mantenimiento\Producto.cshtml" />
+    <Content Include="Views\Home\Ventas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

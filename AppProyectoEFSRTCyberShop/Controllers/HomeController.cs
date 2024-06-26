@@ -15,6 +15,11 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             return View();
         }
 
+        public ActionResult Ventas()
+        {
+            return View();
+        }
+
         public ActionResult Usuarios()
         {
             return View();

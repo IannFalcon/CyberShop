@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Ventas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mt-4">Ventas</h2>
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="#">Resumen</a></li>
+    <li class="breadcrumb-item active">Ventas</li>
+</ol>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-tags me-1"></i>
+        Historial de ventas:
+    </div>
+    <div class="card-body">
+
+        <form>
+            <div class="row align-items-end">
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de Inicio:</label>
+                        <input class="form-control" id="txtFecInicio" name="FechaInicio" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de Fin:</label>
+                        <input class="form-control" id="txtFecFin" name="FechaFin" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">ID de Transacción:</label>
+                        <input class="form-control" id="txtTransaccion" name="Transaccion" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="d-grid mb-2">
+                        <button class="btn btn-outline-primary" id="btnBuscar" type="button"><i class="fas fa-search me-1"></i>Buscar</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="d-grid mb-2">
+                        <button class="btn btn-outline-success" id="btnExportar" type="submit"><i class="fas fa-file-excel me-1"></i>Exportar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="tabla_usuario" class="table mt-2 mb-2" style="width: 100%">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Fecha Venta</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>ID Transacción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

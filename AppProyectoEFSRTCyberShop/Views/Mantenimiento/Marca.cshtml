@@ -7,7 +7,7 @@
 <h2 class="mt-4">Marca</h2>
 
 <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="index.html">Mantenimiento</a></li>
+    <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
     <li class="breadcrumb-item active">Marca</li>
 </ol>
 
@@ -95,6 +95,7 @@
         var tabladata;
         var filaseleccionada;
 
+        // Listar marcas
         tabladata = $("#tabla_marcas").DataTable({
             responsive: true,
             ordering: true,
@@ -148,6 +149,7 @@
 
         }
 
+        // Boton editar
         $("#tabla_marcas tbody").on("click", '.btn-editar', function () {
 
             filaseleccionada = $(this).closest("tr");
@@ -158,6 +160,7 @@
 
         })
 
+        // Boton eliminar
         $("#tabla_marcas tbody").on("click", '.btn-eliminar', function () {
 
             var seleccionado = $(this).closest("tr");

@@ -7,7 +7,7 @@
 <h2 class="mt-4">Productos</h2>
 
 <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="index.html">Mantenimiento</a></li>
+    <li class="breadcrumb-item"><a href="#">Mantenimiento</a></li>
     <li class="breadcrumb-item active">Productos</li>
 </ol>
 
@@ -149,6 +149,7 @@
             }
         }
 
+        // Listar productos
         tabladata = $("#tabla_productos").DataTable({
             responsive: true,
             ordering: true,
@@ -194,6 +195,7 @@
             }
         });
 
+        // Listar marcas
         jQuery.ajax({
             url: '@Url.Action("ListarMarca", "Mantenimiento")',
             type: "GET",
@@ -216,6 +218,7 @@
             }
         });
 
+        // Listar categorias
         jQuery.ajax({
             url: '@Url.Action("ListarCategoria", "Mantenimiento")',
             type: "GET",
@@ -238,6 +241,7 @@
             }
         });
 
+        // Validaciones
         jQuery.validator.addMethod("preciodecimal", function (value, element) {
             return this.optional(element) || /^\d{0,4}(\.\d{0,2})?$/i.test(value);
         }, "El formato correcto del precio es 0.00");
@@ -294,22 +298,55 @@
                 $("#txtStock").val(json.Stock);
                 $("#cboActivo").val(json.Activo == true ? 1 : 0);
 
+                jQuery.ajax({
+                    url: '@Url.Action("ImagenProducto", "Mantenimiento")',
+                    type: "POST",
+                    data: JSON.stringify({ id: json.IdProducto }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        $("#img_producto").LoadingOverlay("hide");
+
+                        if (data._conversion) {
+                            $("#img_producto").attr({ "src": "data:image/" + data.extension + ";base64," + data._textobase64 });
+                        }
+
+                    },
+                    error: function (error) {
+
+                        $("#img_producto").LoadingOverlay("hide");
+                        $("#MensajeError").show();
+                        $("#MensajeError").text("Error al mostrar la imagen");
+
+                    },
+                    beforeSend: function () {
+
+                        $("#img_producto").LoadingOverlay("show")
+
+                    }
+                });
+
             }
 
             $("#ProductosModal").modal("show");
 
         }
 
+        // Boton Editar
         $("#tabla_productos tbody").on("click", '.btn-editar', function () {
 
             filaseleccionada = $(this).closest("tr");
 
             var data = tabladata.row(filaseleccionada).data();
 
+            console.log(data);
+
             abrirModal(data);
 
-        })
+        });
 
+        // Boton Eliminar
         $("#tabla_productos tbody").on("click", '.btn-eliminar', function () {
 
             var seleccionado = $(this).closest("tr");
@@ -344,8 +381,7 @@
                                 tabladata.row(seleccionado).remove().draw()
 
                             }
-                            else
-                            {
+                            else {
 
                                 Swal.fire({
                                     icon: "error",
@@ -370,7 +406,7 @@
                     });
                 }
             });
-        })
+        });
 
         function Guardar() {
 
@@ -387,11 +423,11 @@
                 Descripcion: $("#txtDescripcion").val(),
                 objMarca: {
                     IdMarca: $("#cboMarca option:selected").val(),
-                    Descripcion: $("#cboMarca option:selected").val()
+                    Descripcion: $("#cboMarca option:selected").text()
                 },
                 objCategoria: {
                     IdCategoria: $("#cboCategoria option:selected").val(),
-                    Descripcion: $("#cboCategoria option:selected").val()
+                    Descripcion: $("#cboCategoria option:selected").text()
                 },
                 PrecioTexto: $("#txtPrecio").val(),
                 Precio: $("#txtPrecio").val(),
@@ -413,6 +449,8 @@
                 contentType: false,
                 success: function (data) {
 
+                    $(".modal-body").LoadingOverlay("hide");
+
                     // Registrar producto
                     if (Producto.IdProducto == 0) {
 
@@ -433,7 +471,7 @@
                     // Editar producto
                     } else {
 
-                        if (data.operacionExitosa) {
+                        if (data._operacion_exitosa) {
 
                             tabladata.row(filaseleccionada).data(Producto).draw(false);
                             filaseleccionada = null;

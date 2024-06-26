@@ -143,7 +143,7 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             }
             else
             {
-                return Json(new { operacionExitosa = false, mensaje = "El formato del precio debe ser 0.00" }, JsonRequestBehavior.AllowGet);
+                return Json(new { _operacion_exitosa = false, _mensaje = "El formato del precio debe ser 0.00" }, JsonRequestBehavior.AllowGet);
             }
 
             if(objProd.IdProducto == 0)
