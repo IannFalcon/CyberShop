@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace AppProyectoEFSRTCyberShop.Controllers
 {
@@ -63,6 +64,14 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             resultado = new CN_Usuarios().Eliminar(id, out mensaje);
 
             return Json(new { _resultado = resultado, _mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult VistaResumen()
+        {
+            Resumen obj = new CN_Resumen().ResumenData();
+
+            return Json(new { _resultado = obj }, JsonRequestBehavior.AllowGet);
         }
 
     }

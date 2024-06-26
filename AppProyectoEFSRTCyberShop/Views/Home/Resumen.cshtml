@@ -67,3 +67,27 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    
+    <script>
+
+        jQuery.ajax({
+            url: '@Url.Action("VistaResumen", "Home")',
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                var objeto = data._resultado;
+
+                $("#totalClientes").text(objeto.TotalCliente)
+                $("#totalVentas").text(objeto.TotalVenta)
+                $("#totalProductos").text(objeto.TotalProducto)
+
+            }
+        });
+
+    </script>
+
+}
