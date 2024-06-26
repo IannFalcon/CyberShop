@@ -4,5 +4,301 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Categoria</h2>
+<h2 class="mt-4">Categorias</h2>
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="index.html">Mantenimiento</a></li>
+    <li class="breadcrumb-item active">Categoria</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-users me-1"></i>
+        Lista de Categoria
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-outline-success mb-3" onclick="abrirModal()">Nueva Categoria</button>
+            </div>
+
+            <hr />
+
+            <table id="tabla_categoria" class="table mt-5 mb-2" style="width: 100%">
+                <thead class="table-dark">
+                    <tr>
+
+                        <th>Descripcion</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Categoria -->
+<div class="modal fade" id="CategoriaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Guardar Categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body g-2">
+
+                <input id="txtId" type="hidden" value="0" />
+
+                <div class="row g-1">
+
+
+
+                    <div class="form-group col-sm-6">
+                        <label for="txtdescripcion">Descripcion:</label>
+                        <input type="text" class="form-control" id="txtdescripcion" autocomplete="off">
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        <label for="cboActivo">Activo:</label>
+                        <select id="cboActivo" class="form-select">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+
+                </div>
+
+                <!--Mensaje de Alerta-->
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div id="MensajeError" class="alert alert-danger" role="alert">
+                            <!-- Mensaje de error -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+
+        var tabladata;
+        var filaseleccionada;
+
+
+
+        tabladata = $("#tabla_categoria").DataTable({
+            responsive: true,
+            ordering: true,
+            "ajax": {
+                url: '@Url.Action("ListarCategoria", "Mantenimiento")',
+                type: "GET",
+                dataType: "json",
+            },
+            "columns": [
+
+                { "data": "Descripcion" },
+                {
+                    "data": "Activo", "render": function (valor) {
+                        if (valor) {
+                            return '<span class="badge bg-success">Si</span>'
+                        } else {
+                            return '<span class="badge bg-danger">No</span>'
+                        }
+                    }
+                },
+                {
+                    "defaultContent": '<button class="btn btn-outline-info btn-sm btn-editar"><i class="fas fa-pen"></i> Editar</button>' +
+                                      '<button class="btn btn-outline-danger btn-sm ms-2 btn-eliminar"><i class="fas fa-trash"></i> Eliminar</button>',
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "200px"
+                }
+            ],
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/es-MX.json'
+            },
+        });
+
+        function abrirModal(json) {
+
+            $("#txtId").val(0);
+            $("#txtdescripcion").val("");
+            $("#cboActivo").val(1);
+
+            $("#MensajeError").hide();
+
+            if (json != null) {
+
+                $("#txtId").val(json.IdCategoria);
+                $("#txtdescripcion").val(json.Descripcion);
+                $("#cboActivo").val(json.Activo == true ? 1 : 0);
+
+            }
+
+            $("#CategoriaModal").modal("show");
+
+        }
+
+        $("#tabla_categoria tbody").on("click", '.btn-editar', function () {
+
+            filaseleccionada = $(this).closest("tr");
+
+            var data = tabladata.row(filaseleccionada).data();
+
+            abrirModal(data);
+
+        })
+
+        $("#tabla_categoria tbody").on("click", '.btn-eliminar', function () {
+
+            var seleccionado = $(this).closest("tr");
+
+            var data = tabladata.row(seleccionado).data();
+
+            Swal.fire({
+
+                title: "¿Estas seguro?",
+                text: "¡Esta acción no se puede revertir!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, deseo eliminarlo",
+                cancelButtonText: "Cancelar"
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+
+
+                    jQuery.ajax({
+                        url: '@Url.Action("EliminarCategoria", "Mantenimiento")',
+                        type: "POST",
+                        data: JSON.stringify({ id: data.IdCategoria }),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+
+                            if (data._resultado) {
+                                tabladata.row(seleccionado).remove().draw()
+                            }
+                            else
+                            {
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "¡La categoria no se pudo eliminar!"
+                                });
+
+                            }
+
+                        },
+                        error: function (error) {
+
+                            console.log(error);
+
+                        }
+                    });
+
+                    Swal.fire({
+                        title: "¡Eliminado!",
+                        text: "La categoria fue eliminado.",
+                        icon: "success"
+                    });
+                }
+            });
+        })
+
+        function Guardar() {
+
+            var Categoria = {
+
+                IdCategoria: $("#txtId").val(),
+                Descripcion: $("#txtdescripcion").val(),
+                Activo: $("#cboActivo").val() == 1 ? true : false
+
+            }
+
+            jQuery.ajax({
+                url: '@Url.Action("GuardarCategoria", "Mantenimiento")',
+                type: "POST",
+                data: JSON.stringify({ obj: Categoria }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    // Registrar categoria
+                    if (Categoria.IdCategoria == 0) {
+
+                        if (data._resultado != 0) {
+
+                            Categoria.IdCategoria = data._resultado;
+                            tabladata.row.add(Categoria).draw(false);
+
+                            $("#CategoriaModal").modal("hide");
+
+                        } else {
+
+                            $("#MensajeError").text(data._mensaje);
+                            $("#MensajeError").show();
+
+                        }
+
+                    // Editar  categoria
+                    } else {
+
+                        if (data._resultado) {
+
+                            tabladata.row(filaseleccionada).data(Categoria).draw(false);
+                            filaseleccionada = null;
+
+                            $("#CategoriaModal").modal("hide");
+
+                        } else {
+
+                            $("#MensajeError").text(data._mensaje);
+                            $("#MensajeError").show();
+
+                        }
+
+                    }
+
+                },
+                error: function (error) {
+
+                    $(".modal-body").LoadingOverlay("hide");
+                    $("#MensajeError").text(error);
+                    $("#MensajeError").show();
+
+                },
+                beforeSend: function () {
+
+                    $(".modal-body").LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-cog fa-spin"
+                    });
+                    $(".modal-body").LoadingOverlay("show");
+                    $(".modal-body").LoadingOverlay("hide", true);
+
+                }
+            });
+
+        }
+
+    </script>
+}
 

@@ -17,10 +17,8 @@ namespace AppProyectoEFSRTCyberShop
                         "~/Scripts/DataTables/datatables.responsive.js",
                         "~/Scripts/loadingoverlay/loadingoverlay.min.js",
                         "~/Scripts/sweetalert2.all.min.js",
+                        "~/Scripts/jquery.validate*",
                         "~/Scripts/scripts.js"));
-
-            // bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-            //             "~/Scripts/jquery.validate*"));
 
             // Utilice la versión de desarrollo de Modernizr para desarrollar y obtener información sobre los formularios.  De esta manera estará
             // para la producción, use la herramienta de compilación disponible en https://modernizr.com para seleccionar solo las pruebas que necesite.
