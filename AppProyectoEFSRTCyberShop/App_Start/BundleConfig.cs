@@ -13,6 +13,10 @@ namespace AppProyectoEFSRTCyberShop
 
             bundles.Add(new ScriptBundle("~/bundles/complementos").Include(
                         "~/Scripts/fontawesome/all.min.js",
+                        "~/Scripts/DataTables/jquery.dataTables.js",
+                        "~/Scripts/DataTables/datatables.responsive.js",
+                        "~/Scripts/loadingoverlay/loadingoverlay.min.js",
+                        "~/Scripts/sweetalert2.all.min.js",
                         "~/Scripts/scripts.js"));
 
             // bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -27,7 +31,11 @@ namespace AppProyectoEFSRTCyberShop
                         "~/Scripts/bootstrap.min.js",
                         "~/Scripts/bootstrap.bundle.min.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                        "~/Content/site.css",
+                        "~/Content/DataTables/css/jquery.dataTables.css",
+                        "~/Content/DataTables/css/responsive.dataTables.css",
+                        "~/Content/sweetalert2.min.css"));
         }
     }
 }
