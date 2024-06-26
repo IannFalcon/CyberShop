@@ -18,6 +18,7 @@ namespace AppProyectoEFSRTCyberShop
                         "~/Scripts/loadingoverlay/loadingoverlay.min.js",
                         "~/Scripts/sweetalert2.all.min.js",
                         "~/Scripts/jquery.validate*",
+                        "~/Scripts/jquery-ui.js",
                         "~/Scripts/scripts.js"));
 
             // Utilice la versión de desarrollo de Modernizr para desarrollar y obtener información sobre los formularios.  De esta manera estará
@@ -33,6 +34,7 @@ namespace AppProyectoEFSRTCyberShop
                         "~/Content/site.css",
                         "~/Content/DataTables/css/jquery.dataTables.css",
                         "~/Content/DataTables/css/responsive.dataTables.css",
+                        "~/Content/themes/base/images/jquery-ui.css",
                         "~/Content/sweetalert2.min.css"));
         }
     }

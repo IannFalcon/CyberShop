@@ -45,14 +45,15 @@
     <Compile Include="CD_Categoria.cs" />
     <Compile Include="CD_Marca.cs" />
     <Compile Include="CD_Producto.cs" />
+    <Compile Include="CD_Cliente.cs" />
     <Compile Include="CD_Usuarios.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CapaEntidades\CapaEntidades.csproj">
+    <ProjectReference Include="..\CapaEntidades\CyberShopEntidades.csproj">
       <Project>{75b895f0-7ea4-4917-8ea4-811730ff15dc}</Project>
-      <Name>CapaEntidades</Name>
+      <Name>CyberShopEntidades</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

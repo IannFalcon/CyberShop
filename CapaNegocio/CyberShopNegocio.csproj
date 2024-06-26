@@ -44,18 +44,19 @@
     <Compile Include="CN_Categoria.cs" />
     <Compile Include="CN_Marca.cs" />
     <Compile Include="CN_Productos.cs" />
+    <Compile Include="CN_Cliente.cs" />
     <Compile Include="CN_Recursos.cs" />
     <Compile Include="CN_Usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CapaDatos\CapaDatos.csproj">
+    <ProjectReference Include="..\CapaDatos\CyberShopDatos.csproj">
       <Project>{96ee7bcf-1946-43b5-bbba-a294b5e2132c}</Project>
-      <Name>CapaDatos</Name>
+      <Name>CyberShopDatos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CapaEntidades\CapaEntidades.csproj">
+    <ProjectReference Include="..\CapaEntidades\CyberShopEntidades.csproj">
       <Project>{75b895f0-7ea4-4917-8ea4-811730ff15dc}</Project>
-      <Name>CapaEntidades</Name>
+      <Name>CyberShopEntidades</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
