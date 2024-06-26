@@ -11,8 +11,8 @@ namespace AppProyectoEFSRTCyberShop.Controllers
     public class HomeController : Controller
     {
 
-        [Authorize]
-        public ActionResult Index()
+        // [Authorize]
+        public ActionResult Resumen()
         {
             return View();
         }
