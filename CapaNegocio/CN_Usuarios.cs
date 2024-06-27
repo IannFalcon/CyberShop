@@ -105,20 +105,25 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
             string nuevaclave = CN_Recursos.GenerarClave();
+
             bool resultado = objCapaDatos.ReestablecerClave(idusuario, CN_Recursos.EncriptarClave(nuevaclave), out Mensaje);
+
             if (resultado)
             {
-                string asunto = "Reestablecer Contraseña";
-                string mensaje_correo = "<h3>Su cuenta fue reestablecida correctamente </h3> </br><p>Su nueva contraseña para acceder es: !clave</p>";
-                mensaje_correo = mensaje_correo.Replace("!clave!", nuevaclave);
+                string asunto = "Reestablecer Contraseña - CyberShop";
+                string mensaje_correo = "<h3>Su cuenta fue reestablecida correctamente</h3>" +
+                                        "</br>" +
+                                        $"<p>Su nueva contraseña para acceder es: {nuevaclave} </p>";
 
                 bool respuesta = CN_Recursos.EnviarCorreoClave(correo, asunto, mensaje_correo); 
 
                 if (respuesta)
                 {
                     return true;
-                } else {
-                    Mensaje = "Error al enviar ael correo";
+                } 
+                else
+                {
+                    Mensaje = "Error al enviar el correo de recuperación";
                     return false; 
                 }
             }

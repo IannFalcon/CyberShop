@@ -12,7 +12,7 @@ namespace AppProyectoEFSRTCyberShop.Controllers
     public class AccesoController : Controller
     {
         // GET: Acceso
-        public ActionResult Index()
+        public ActionResult Login()
         {
             return View();
         }
@@ -25,20 +25,23 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             return View();
         }
 
+        #region INICIO DE SESIÓN
 
         [HttpPost]
-        public ActionResult Index(string correo, string clave)
+        public ActionResult Login(string correo, string clave)
         {
             Usuario usuario = new Usuario();
+
             usuario = new CN_Usuarios().Listar().Where(u => u.Correo == correo && u.Clave == CN_Recursos.EncriptarClave(clave)).FirstOrDefault();
 
             if (usuario == null)
             {
-                ViewBag.Error = "Correo o contraseña invalidos";
+                ViewBag.Error = "Correo y/o contraseña invalidos";
                 return View();
-            }else{
-
-                if (usuario == null)
+            }
+            else
+            {
+                if (usuario.Reestablecer)
                 {
                     TempData["IdUsuario"] = usuario.IdUsuario;
                     return RedirectToAction("CambiarClave");
@@ -47,17 +50,17 @@ namespace AppProyectoEFSRTCyberShop.Controllers
                 FormsAuthentication.SetAuthCookie(usuario.Correo, false);
 
                 ViewBag.Error = null;
-                RedirectToAction("Index", "Home");
+                return RedirectToAction("Resumen", "Home");
             }
-
-            return View();
         }
 
         [HttpPost]
         public ActionResult CambiarClave(string idusuario, string claveactual, string nuevaclave, string confirmarclave)
         {
             Usuario usuario = new Usuario();
+
             usuario = new CN_Usuarios().Listar().Where(u => u.IdUsuario == int.Parse(idusuario)).FirstOrDefault();
+
             if(usuario.Clave != CN_Recursos.EncriptarClave(claveactual))
             {
                 TempData["IdUsuario"] = idusuario;
@@ -65,7 +68,8 @@ namespace AppProyectoEFSRTCyberShop.Controllers
                 ViewBag.Error = "Contraseña Incorrecta";
                 return View();
 
-            } else if(nuevaclave != confirmarclave)
+            } 
+            else if(nuevaclave != confirmarclave)
             {
                 TempData["IdUsuario"] = idusuario;
                 ViewData["vclave"] = claveactual;
@@ -73,21 +77,26 @@ namespace AppProyectoEFSRTCyberShop.Controllers
                 return View();
 
             }
+
             ViewData["vclave"] = ""; 
+
             nuevaclave = CN_Recursos.EncriptarClave(nuevaclave);
             string mensaje = string.Empty;
             bool respuesta = new CN_Usuarios().CambiarClave(int.Parse(idusuario), nuevaclave, out mensaje);
 
-            if (respuesta )
+            if (respuesta)
             {
-                return RedirectToAction("Index");
-            } else
+                return RedirectToAction("Login");
+            } 
+            else
             {
                 TempData["IdUsuario"] = idusuario;
                 ViewBag.Error = mensaje;
                 return View();
             }
         }
+
+        #endregion
 
         [HttpPost]
         public ActionResult Reestablecer(string correo)

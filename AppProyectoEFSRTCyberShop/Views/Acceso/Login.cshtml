@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>CambiarClave</title>
+    <title>Login</title>
     <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
@@ -19,29 +19,22 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-1 rounded-lg mt-5">
-                                <div class="card-header bg-black text-white"><h3 class="text-center font-weight-light my-4">Cambiar contraseña</h3></div>
+                                <div class="card-header bg-black text-white"><h3 class="text-center font-weight-light my-4">Login</h3></div>
                                 <div class="card-body">
-                                    <form action="@Url.Action("CambiarClave", "Acceso")" method="post">
-
-                                        <input class="form-control" name="idusuario" value="@TempData["IdUsuario"]" type="hidden" />
+                                    <form action="@Url.Action("Login", "Acceso")" method="post">
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="claveactual" type="password" value="@ViewData["vclave"]" />
-                                            <label for="inputEmail">Contraseña actual</label>
+                                            <input class="form-control" id="inputEmail" name="correo" type="email" />
+                                            <label for="inputEmail">Email</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="nuevaclave" type="password" />
-                                            <label for="inputEmail">Nueva contraseña</label>
+                                            <input class="form-control" id="inputPassword" name="clave" type="password" />
+                                            <label for="inputPassword">Contraseña</label>
                                         </div>
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="confirmarclave" type="password" />
-                                            <label for="inputPassword">Confirmar contraseña</label>
-                                        </div>
-
-                                        @{
-                                            if (ViewBag.Error != null)
+                                        @{ 
+                                            if(ViewBag.Error != null) 
                                             {
                                                 <div class="form-floating mb-3">
                                                     <div class="alert alert-danger" role="alert">
@@ -54,8 +47,8 @@
                                         <hr />
 
                                         <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
-                                            <a class="btn btn-primary" href="@Url.Action("Login", "Acceso")">Volver</a>
-                                            <button class="btn btn-success" type="submit">Cambiar contraseña</button>
+                                            <a class="small" href="password.html">¿Ovidaste tu contraseña?</a>
+                                            <button class="btn btn-success" type="submit">Iniciar Sesion</button>
                                         </div>
 
                                     </form>
