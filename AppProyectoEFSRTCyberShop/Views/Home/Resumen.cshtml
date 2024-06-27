@@ -4,13 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="mt-4">Bienvenido</h1>
+<h1 class="fw-bold mt-4">BIENVENIDO</h1>
 
 <hr />
 
 <div class="row">
+    <h4 class="fw-bold mb-3">Resumen:</h4>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card bg-dark text-warning mb-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-9">
@@ -22,14 +23,14 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="@Url.Action("Usuarios", "Home")">Ver usuarios</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            <div class="card-footer border-warning d-flex align-items-center justify-content-between">
+                <a class="small text-warning stretched-link" href="@Url.Action("Usuarios", "Home")">Ver usuarios</a>
+                <div class="small text-warning"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-4">
+        <div class="card bg-dark text-info mb-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-9">
@@ -41,14 +42,54 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="@Url.Action("Ventas", "Home")">Ver ventas</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            <div class="card-footer border-info d-flex align-items-center justify-content-between">
+                <a class="small text-info stretched-link" href="@Url.Action("Ventas", "Home")">Ver ventas</a>
+                <div class="small text-info"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h4 class="fw-bold mb-3">Mantenimiento:</h4>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-dark text-success mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Total categorias: </h6>
+                        <h6 id="totalCategorias"></h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fas fa-table fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-dark border-success d-flex align-items-center justify-content-between">
+                <a class="small text-success stretched-link" href="@Url.Action("Categoria", "Mantenimiento")">Ver categorias</a>
+                <div class="small text-success"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-secondary text-white mb-4">
+        <div class="card bg-dark text-primary mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Total marcas: </h6>
+                        <h6 id="totalMarcas"></h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fas fa-bookmark fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-dark border-primary d-flex align-items-center justify-content-between">
+                <a class="small text-primary stretched-link" href="@Url.Action("Marca", "Mantenimiento")">Ver marcas</a>
+                <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-dark text-danger mb-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-9">
@@ -60,9 +101,9 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" href="@Url.Action("Producto", "Mantenimiento")">Ver productos</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            <div class="card-footer bg-dark border-danger d-flex align-items-center justify-content-between">
+                <a class="small text-danger stretched-link" href="@Url.Action("Producto", "Mantenimiento")">Ver productos</a>
+                <div class="small text-danger"><i class="fas fa-angle-right"></i></div>
             </div>
         </div>
     </div>
@@ -83,6 +124,8 @@
 
                 $("#totalClientes").text(objeto.TotalCliente)
                 $("#totalVentas").text(objeto.TotalVenta)
+                $("#totalCategorias").text(objeto.TotalCategoria)
+                $("#totalMarcas").text(objeto.TotalMarca)
                 $("#totalProductos").text(objeto.TotalProducto)
 
             }

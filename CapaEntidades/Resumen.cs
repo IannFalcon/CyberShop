@@ -11,5 +11,7 @@ namespace CapaEntidades
         public int TotalCliente { get; set; }
         public int TotalVenta{ get; set; }
         public int TotalProducto { get; set; }
+        public int TotalCategoria { get; set; }
+        public int TotalMarca { get; set; }
     }
 }

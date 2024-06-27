@@ -30,7 +30,9 @@ namespace CapaDatos
                             {
                                 TotalCliente = Convert.ToInt32(dr[0]),
                                 TotalVenta = Convert.ToInt32(dr[1]),
-                                TotalProducto = Convert.ToInt32(dr[2])
+                                TotalProducto = Convert.ToInt32(dr[2]),
+                                TotalCategoria = Convert.ToInt32(dr[3]),
+                                TotalMarca = Convert.ToInt32(dr[4])
                             };
                         }
                     }
