@@ -97,12 +97,12 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
         }
 
         [HttpGet]
-        public JsonResult CantidadEnCarrito()
+        public JsonResult CantidadCarrito()
         {
             int idcliente = ((Cliente)Session["Cliente"]).IdCliente;
-            int cantidad = new CN_Carrito().CantidadEnCarrito(idcliente);
+            int cantidad = new CN_Carrito().CantidadCarrito(idcliente);
 
-            return Json(new {_cantidad = cantidad }, JsonRequestBehavior.AllowGet);
+            return Json(new { _cantidad = cantidad }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

@@ -15,7 +15,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    string query = "SELECT IdUsuario, Nombres, Apellidos, Correo, Clave, Reestablecer FROM USUARIO ";
+                    string query = "SELECT IdCliente, Nombres, Apellidos, Correo, Clave, Reestablecer FROM CLIENTE WHERE ELIMINADO = 'No'";
                     SqlCommand cmd = new SqlCommand(query, cnx);
                     cnx.Open();
 
@@ -25,7 +25,7 @@ namespace CapaDatos
                         {
                             listado.Add(new Cliente()
                             {
-                                IdCliente = Convert.ToInt32(dr["IdUsuario"]),
+                                IdCliente = Convert.ToInt32(dr["IdCliente"]),
                                 Nombres = dr["Nombres"].ToString(),
                                 Apellidos = dr["Apellidos"].ToString(),
                                 Correo = dr["Correo"].ToString(),

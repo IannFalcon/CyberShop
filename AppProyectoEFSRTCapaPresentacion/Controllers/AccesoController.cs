@@ -10,8 +10,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
     public class AccesoController : Controller
     {
 
-
-        public ActionResult Index()
+        public ActionResult LoginCliente()
         {
             return View();
         }
@@ -29,23 +28,25 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string correo, string clave)
+        public ActionResult LoginCliente(string correo, string clave)
         {
-            Cliente oCliente = null;
-            oCliente = new CN_Cliente().ListarCliente().Where(item => item.Correo == correo && item.Clave == CN_Recursos.EncriptarClave(clave)).FirstOrDefault();
-            if (oCliente == null) {
-                ViewBag.Error = "Correo o Contraseña invalidos";
+            Cliente obj = null;
+            obj = new CN_Cliente().ListarCliente().Where(c => c.Correo == correo && c.Clave == CN_Recursos.EncriptarClave(clave)).FirstOrDefault();
+            if (obj == null) {
+                ViewBag.Error = "Correo y/o contraseña invalidos";
                 return View();
             }
-            else{
-                if (oCliente.Reestablecer) {
-                TempData["IdCliente"] = oCliente.IdCliente;
-                return RedirectToAction("CambiarClave", "Acceso");
-                       
-                }else
+            else
+            {
+                if (obj.Reestablecer)
                 {
-                    FormsAuthentication.SetAuthCookie(oCliente.Correo, false);
-                    Session["Cliente"] = oCliente;
+                    TempData["IdCliente"] = obj.IdCliente;
+                    return RedirectToAction("CambiarClave", "Acceso");
+                }
+                else
+                {
+                    FormsAuthentication.SetAuthCookie(obj.Correo, false);
+                    Session["Cliente"] = obj;
                     ViewBag.Error = null;
 
                     return RedirectToAction("Index", "Tienda");
@@ -70,12 +71,19 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             }
 
             resultado = new CN_Cliente().Registrar(obj, out Mensaje);
+
             if (resultado > 0) {
+
                 ViewBag.Error = null; 
-                return RedirectToAction("Index", "Acceso");
-            }else{
+                return RedirectToAction("LoginCliente", "Acceso");
+
+            }
+            else
+            {
+
                 ViewBag.Error = Mensaje;
                 return View();
+
             }
         }
 
@@ -96,7 +104,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             if (respuesta)
             {
                 ViewBag.Error = null;
-                return RedirectToAction("Index", "Acceso");
+                return RedirectToAction("LoginCliente", "Acceso");
             }
             else
             {
@@ -110,13 +118,13 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
         {
             Cliente cliente = new Cliente();
             cliente = new CN_Cliente().ListarCliente().Where(u => u.IdCliente == int.Parse(idcliente)).FirstOrDefault();
+
             if (cliente.Clave != CN_Recursos.EncriptarClave(claveactual))
             {
                 TempData["IdCliente"] = idcliente;
 
                 ViewBag.Error = "Contraseña Incorrecta";
                 return View();
-
             }
             else if (nuevaclave != confirmarclave)
             {
@@ -126,14 +134,16 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
                 return View();
 
             }
+
             ViewData["vclave"] = "";
+
             nuevaclave = CN_Recursos.EncriptarClave(nuevaclave);
             string mensaje = string.Empty;
-            bool respuesta = new CN_Usuarios().CambiarClave(int.Parse(idcliente), nuevaclave, out mensaje);
+            bool respuesta = new CN_Cliente().CambiarClave(int.Parse(idcliente), nuevaclave, out mensaje);
 
             if (respuesta)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("LoginCliente");
             }
             else
             {
@@ -148,7 +158,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             Session["Cliente"] = null;
 
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Acceso");
+            return RedirectToAction("LoginCliente", "Acceso");
         }
 
     }

@@ -20,7 +20,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Crear una cuenta </h3></div>
+                                <div class="card-header bg-dark text-white"><h3 class="text-center font-weight-light my-4">Crear una cuenta </h3></div>
                                 <div class="card-body">
                                     <form action="@Url.Action("Registrar","Acceso")" method="post">
                                         <div class="row mb-3">
@@ -43,8 +43,10 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                @Html.PasswordFor(m => m.Clave, new { @class = "form-control", @id = "txtclave", @placeholder = "." })
-                                                @Html.Label("txtclave", "Contraseña")
+                                                <div class="form-floating mb-3 mb-md-0">
+                                                    @Html.PasswordFor(m => m.Clave, new { @class = "form-control", @id = "txtclave", @placeholder = "." })
+                                                    @Html.Label("txtclave", "Contraseña")
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-floating mb-3 mb-md-0">
@@ -66,12 +68,12 @@
                                         }
 
                                         <div class="mt-4 mb-0">
-                                            <div class="d-grid"><button class="btn btn-primary btn-block" type="submit">Crear una cuenta </button></div>
+                                            <div class="d-grid"><button class="btn btn-outline-success btn-block" type="submit">¡Registrate!</button></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="@Url.Action("Index","Acceso")">¿Ya tienes una cuenta?Iniciar Sesion</a></div>
+                                    <div class="small"><a href="@Url.Action("LoginCliente","Acceso")">¿Ya tienes una cuenta? Iniciar Sesion</a></div>
                                 </div>
                             </div>
                         </div>

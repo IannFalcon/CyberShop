@@ -19,22 +19,35 @@ namespace CapaNegocio
 
             if (string.IsNullOrEmpty(obj.Nombres) || string.IsNullOrWhiteSpace(obj.Nombres))
             {
-                Mensaje = "El nombre del Cliente no puede ser vacio";
+                Mensaje = "Los nombres no pueden ser vacios";
             }
             else if (string.IsNullOrEmpty(obj.Apellidos) || string.IsNullOrWhiteSpace(obj.Apellidos))
             {
-                Mensaje = "El apellido del Cliente no puede ser vacio";
+                Mensaje = "Los apellidos no pueden ser vacios";
             }
             else if (string.IsNullOrEmpty(obj.Correo) || string.IsNullOrWhiteSpace(obj.Correo))
             {
-                Mensaje = "El correo del Cliente no puede ser vacio";
+                Mensaje = "El correo no puede ser vacio";
             }
 
             if (string.IsNullOrEmpty(Mensaje))
             {
                 obj.Clave = CN_Recursos.EncriptarClave(obj.Clave);
-                    return objCapaDatos.RegistrarUsuario(obj, out Mensaje);
 
+                string asunto = "Bienvenido a CyberShop";
+                string mensaje_correo = $"<h3>Cuenta registrada con exito</h3></br><p>¡Bienvenido a CyberShop {obj.Nombres} {obj.Apellidos}!</p>";
+
+                bool respuesta = CN_Recursos.EnviarCorreoClave(obj.Correo, asunto, mensaje_correo);
+
+                if (respuesta)
+                {
+                    return objCapaDatos.RegistrarUsuario(obj, out Mensaje);
+                }
+                else
+                {
+                    Mensaje = "Error al enviar el correo";
+                    return 0;
+                }
             }
             else
             {
@@ -56,8 +69,7 @@ namespace CapaNegocio
             if (resultado)
             {
                 string asunto = "Reestablecer Contraseña";
-                string mensaje_correo = "<h3>Su cuenta fue reestablecida correctamente </h3> </br><p>Su nueva contraseña para acceder ahora es: !clave!</p>";
-                mensaje_correo = mensaje_correo.Replace("!clave!", nuevaclave);
+                string mensaje_correo = $"<h3>Su cuenta fue reestablecida correctamente</h3></br><p>Su nueva contraseña para acceder ahora es: {nuevaclave}</p>";
 
                 bool respuesta = CN_Recursos.EnviarCorreoClave(correo, asunto, mensaje_correo);
 
@@ -67,7 +79,7 @@ namespace CapaNegocio
                 }
                 else
                 {
-                    Mensaje = "Error al enviar ael correo";
+                    Mensaje = "Error al enviar el correo";
                     return false;
                 }
             }

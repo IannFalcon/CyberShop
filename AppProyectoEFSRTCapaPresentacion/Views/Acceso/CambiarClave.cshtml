@@ -9,6 +9,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>CambiarClave</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
     <div id="layoutAuthentication">
@@ -25,18 +26,18 @@
                                         <input class="form-control" name="idcliente" value="@TempData["IdCliente"]" type="hidden" />
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="claveactual" type="password" value="@ViewData["vclave"]" placeholder="." />
-                                            <label for="inputEmail">Contraseña actual</label>
+                                            <input class="form-control" id="inputClaveActual" name="claveactual" type="password" value="@ViewData["vclave"]" />
+                                            <label for="inputClaveActual">Contraseña actual</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="nuevaclave" type="password" placeholder="." />
-                                            <label for="inputEmail">Nueva contraseña</label>
+                                            <input class="form-control" id="inputNuevaClave" name="nuevaclave" type="password" />
+                                            <label for="inputNuevaClave">Nueva contraseña</label>
                                         </div>
 
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="confirmarclave" type="password" placeholder="." />
-                                            <label for="inputPassword">Confirmar contraseña</label>
+                                            <input class="form-control" id="inputConfirmarClave" name="confirmarclave" type="password" />
+                                            <label for="inputConfirmarClave">Confirmar contraseña</label>
                                         </div>
 
                                         @{
@@ -53,7 +54,7 @@
                                         <hr />
 
                                         <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
-                                            <a class="btn btn-primary" href="@Url.Action("Index", "Acceso")">Volver</a>
+                                            <a class="btn btn-primary" href="@Url.Action("LoginCliente", "Acceso")">Volver</a>
                                             <button class="btn btn-success" type="submit">Cambiar contraseña</button>
                                         </div>
 

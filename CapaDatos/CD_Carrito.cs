@@ -14,7 +14,7 @@ namespace CapaDatos
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    SqlCommand cmd = new SqlCommand("EXISTE_CARRITO", cnx);
+                    SqlCommand cmd = new SqlCommand("VALIDAR_CARRITO", cnx);
 
                     cmd.Parameters.AddWithValue("IdCliente", idcliente);
                     cmd.Parameters.AddWithValue("IdProducto", idproducto);
@@ -39,7 +39,7 @@ namespace CapaDatos
 
         }
 
-        public bool OperacionCarrito(int idcliente,int idproducto, bool sumar,out string Mensaje)
+        public bool OperacionCarrito(int idcliente, int idproducto, bool sumar, out string Mensaje)
         {
             bool resultado = true;
             Mensaje = string.Empty;
@@ -75,21 +75,20 @@ namespace CapaDatos
 
         }
 
-        //SELECT COUNT(*) FROM CARRITO WHERE idcliente = 1
-
-        public int CantidadEnCarrito(int idcliente)
+        public int CantidadCarrito(int idcliente)
         {
             int  resultado = 0;
-
 
             try
             {
                 using (SqlConnection cnx = new SqlConnection(Conexion.con))
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM CARRITO WHERE idcliente = @idcliente", cnx);
+                    SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM CARRITO WHERE IdCliente = @idcliente", cnx);
                     cmd.Parameters.AddWithValue("@idcliente", idcliente);
                     cmd.CommandType = CommandType.Text;
+
                     cnx.Open();
+
                     resultado = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
@@ -102,9 +101,5 @@ namespace CapaDatos
             return resultado;
 
         }
-
-
-
-
     }
 }
