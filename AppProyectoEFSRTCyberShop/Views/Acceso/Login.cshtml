@@ -33,8 +33,8 @@
                                             <label for="inputPassword">Contraseña</label>
                                         </div>
 
-                                        @{ 
-                                            if(ViewBag.Error != null) 
+                                        @{
+                                            if (ViewBag.Error != null)
                                             {
                                                 <div class="form-floating mb-3">
                                                     <div class="alert alert-danger" role="alert">
@@ -47,7 +47,7 @@
                                         <hr />
 
                                         <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
-                                            <a class="small" href="password.html">¿Ovidaste tu contraseña?</a>
+                                            <a class="small" href="@Url.Action("Reestablecer", "Acceso")">¿Ovidaste tu contraseña?</a>
                                             <button class="btn btn-success" type="submit">Iniciar Sesion</button>
                                         </div>
 
@@ -74,5 +74,8 @@
             </footer>
         </div>
     </div>
+
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+
 </body>
 </html>

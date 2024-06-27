@@ -10,10 +10,10 @@ using System.Web.Mvc;
 
 namespace AppProyectoEFSRTCyberShop.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
 
-        // [Authorize]
         public ActionResult Resumen()
         {
             return View();

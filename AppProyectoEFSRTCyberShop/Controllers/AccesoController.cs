@@ -25,7 +25,7 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             return View();
         }
 
-        #region INICIO DE SESIÓN
+        #region GESTION DE SESIÓN
 
         [HttpPost]
         public ActionResult Login(string correo, string clave)
@@ -96,25 +96,25 @@ namespace AppProyectoEFSRTCyberShop.Controllers
             }
         }
 
-        #endregion
-
         [HttpPost]
         public ActionResult Reestablecer(string correo)
         {
             Usuario usuario = new Usuario();
             usuario = new CN_Usuarios().Listar().Where(u => u.Correo == correo).FirstOrDefault();
+
             if (usuario == null)
             {
                 ViewBag.Error = "No existe un usuario relacionado a este correo";
                 return View();
             }
+
             string mensaje = string.Empty;
             bool respuesta = new CN_Usuarios().ReestablecerClave(usuario.IdUsuario, correo, out mensaje);
 
             if (respuesta )
             {
                 ViewBag.Error = null;
-                return RedirectToAction("Index", "Acceso");
+                return RedirectToAction("Login", "Acceso");
             }
             else
             {
@@ -126,7 +126,10 @@ namespace AppProyectoEFSRTCyberShop.Controllers
         public ActionResult CerrarSesion()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index", "Acceso");
+            return RedirectToAction("Login", "Acceso");
         }
+
+        #endregion
+
     }
 }
