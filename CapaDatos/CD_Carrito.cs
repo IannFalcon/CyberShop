@@ -1,11 +1,6 @@
-﻿using CapaEntidades;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace CapaDatos
 {
@@ -14,7 +9,6 @@ namespace CapaDatos
         public bool ExisteCarrito(int idcliente, int idproducto)
         {
             bool resultado = true;
-        
 
             try
             {
