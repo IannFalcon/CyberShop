@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberShopPresentacionUsuarios", "AppProyectoEFSRTCyberShop\CyberShopPresentacionUsuarios.csproj", "{71F634BC-5439-4531-97F6-128D50553650}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberShopPresentacionAdmin", "AppProyectoEFSRTCyberShop\CyberShopPresentacionAdmin.csproj", "{71F634BC-5439-4531-97F6-128D50553650}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberShopPresentacionClientes", "AppProyectoEFSRTCapaPresentacion\CyberShopPresentacionClientes.csproj", "{A89E1EE5-45C7-4165-B638-B52D41A7F9F5}"
 EndProject

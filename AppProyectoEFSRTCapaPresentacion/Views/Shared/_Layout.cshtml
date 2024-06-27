@@ -8,67 +8,67 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~bundles/modernizr")
 </head>
-<body class="d-flex flex-column min-vh-100" >
+<body class="d-flex flex-column min-vh-100">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#!">CyberShop</a>
+            <a class="navbar-brand" href="#!">Mi Tienda</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Tienda")">Inicio</a></li>
-                    <!--<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">All Products</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                        </ul>
-                    </li>-->
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="@Url.Action("Index","Tienda")">Inicio</a></li>
+                    @*
+                            <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>
+                    *@
                 </ul>
                 <form class="d-flex">
 
                     @if (Session["Cliente"] == null)
                     {
-                        <a class="btn btn-outline-dark" aria-current="page" href="@Url.Action("Index", "Acceso")"><i class="fas fa-sign-out-alt me-1"></i>Iniciar Sesión</a>
+                        <a class="btn btn-outline-dark" aria-current="page" href="@Url.Action("Index","Acceso")"><i class="fas fa-sign-out-alt me-1"></i>Iniciar Sesion</a>
                     }
                     else
                     {
-                        <a class="btn btn-outline-dark" href="@Url.Action("Carrito", "Tienda")">
-                            <i class="bi-cart-fill me-1"></i>
+                        <a class="btn btn-outline-dark" href="@Url.Action("Carrito","Tienda")">
+                            <i class="fas fa-shopping-cart me-1"></i>
                             Cart
                             <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                         </a>
-
+                        <!---->
                         <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdwn" href="#" role="button" data-bs-toggle="dropdown"></a>
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#!"><b>@User.Identity.Name</b></a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("MisCompras", "Tienda")">Mis Compras</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("MisCompras","Tienda")">Mis Compras</a></li>
                                     <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar Sesión </a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar Sesión</a></li>
                                 </ul>
                             </li>
                         </ul>
                     }
 
+
                 </form>
             </div>
         </div>
     </nav>
+    @RenderBody()
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mi Aplicación ASP.NET</p>
-        </footer>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Mi Aplicación ASP.NET</p>
+    </footer>
 
-    </div>
-             @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
