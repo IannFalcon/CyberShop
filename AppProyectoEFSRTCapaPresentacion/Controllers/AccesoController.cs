@@ -149,6 +149,8 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
 
         public ActionResult CerrarSesion()
         {
+            Session["Cliente"] = null;
+
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Acceso");
         }
