@@ -67,6 +67,14 @@ namespace AppProyectoEFSRTCyberShop.Controllers
         }
 
         [HttpGet]
+        public JsonResult ListarVentas(string fechaini, string fechafin, string idtransaccion)
+        {
+            List<Reporte> obj = new CN_Venta().Ventas(fechaini, fechafin, idtransaccion);
+
+            return Json(new { _resultado = obj }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public JsonResult VistaResumen()
         {
             Resumen obj = new CN_Resumen().ResumenData();
