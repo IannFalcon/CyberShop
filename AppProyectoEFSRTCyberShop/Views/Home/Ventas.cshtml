@@ -18,24 +18,24 @@
     </div>
     <div class="card-body">
 
-        <form>
+        <form id="FormExportar" action="@Url.Action("ExportarVenta", "Home")" method="post">
             <div class="row align-items-end">
                 <div class="col-sm-2">
                     <div class="mb-2">
                         <label class="form-label">Fecha de Inicio:</label>
-                        <input class="form-control" id="txtFecInicio" name="FechaInicio" />
+                        <input class="form-control" id="txtFecInicio" name="fechaini" />
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="mb-2">
                         <label class="form-label">Fecha de Fin:</label>
-                        <input class="form-control" id="txtFecFin" name="FechaFin" />
+                        <input class="form-control" id="txtFecFin" name="fechafin" />
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="mb-2">
                         <label class="form-label">ID de Transacción:</label>
-                        <input class="form-control" id="txtTransaccion" name="Transaccion" />
+                        <input class="form-control" id="txtTransaccion" name="idtransaccion" />
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -55,7 +55,7 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <table id="tabla_usuario" class="table mt-2 mb-2" style="width: 100%">
+                <table id="tabla_hventas" class="table pt-3 mt-5 mb-2" style="width: 100%">
                     <thead class="table-dark">
                         <tr>
                             <th>Fecha Venta</th>
@@ -80,7 +80,54 @@
 
     <script>
 
+        var tabladata;
 
+        $(document).ready(function () {
+
+            $("#txtFecInicio").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+            $("#txtFecFin").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+
+            // Historial de ventas
+            tabladata = $("#tabla_hventas").DataTable({
+                responsive: true,
+                ordering: true,
+                "ajax": {
+                    url: '@Url.Action("ListarVentas", "Home")',
+                    type: "GET",
+                    dataType: "json",
+                    data: function (data) {
+                        data.fechaini = $("#txtFecInicio").val();
+                        data.fechafin = $("#txtFecFin").val();
+                        data.idtransaccion = $("#txtTransaccion").val();
+                    }
+                },
+                "columns": [
+                    { "data": "FechaVenta" },
+                    { "data": "NombreCliente" },
+                    { "data": "Nombre" },
+                    { "data": "Precio" },
+                    { "data": "Cantidad" },
+                    { "data": "Total" },
+                    { "data": "IdTransaccion" }
+                ],
+                "language": {
+                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/es-MX.json'
+                },
+            });
+
+        });
+
+        // Boton buscar
+        $("#btnBuscar").on("click", function () {
+
+            var nueva_Url = '@Url.Action("ListarVentas", "Home")' +
+                            "?fechaini=" + $("#txtFecInicio").val() +
+                            "&fechafin=" + $("#txtFecFin").val() +
+                            "&idtransaccion=" + $("#txtTransaccion").val();
+
+            tabladata.ajax.url(nueva_Url).load();
+
+        });
 
     </script>
     

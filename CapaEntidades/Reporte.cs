@@ -10,7 +10,7 @@ namespace CapaEntidades
     {
         public string FechaVenta { get; set; }
         public string NombreCliente { get; set; }
-        public string Producto { get; set; }
+        public string Nombre { get; set; }
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }
         public decimal Total { get; set; }

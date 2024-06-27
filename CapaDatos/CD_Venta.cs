@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaDatos
 {
@@ -36,7 +33,7 @@ namespace CapaDatos
                             {
                                 FechaVenta = dr[0].ToString(),
                                 NombreCliente = dr[1].ToString(),
-                                Producto = dr[2].ToString(),
+                                Nombre = dr[2].ToString(),
                                 Precio = Convert.ToDecimal(dr[3], new CultureInfo("es-PE")),
                                 Cantidad = Convert.ToInt32(dr[4]),
                                 Total = Convert.ToDecimal(dr[5], new CultureInfo("es-PE")),
