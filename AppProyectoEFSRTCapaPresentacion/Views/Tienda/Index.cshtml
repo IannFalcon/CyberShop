@@ -65,56 +65,7 @@
 
             <div class="col-sm-9">
                 <div id="contenedor_producto" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Fancy Product</h5>
-                                    <!-- Product price-->
-                                    $40.00 - $80.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Special Item</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">$20.00</span>
-                                    $18.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <!-- Aqui se insertaran los productos existentes -->
                 </div>
             </div>
         </div>
@@ -125,8 +76,67 @@
 {
     <script>
 
-        MostrarCategorias();
-        MostrarProductos(0, 0);
+        $(document).ready(function () {
+
+            MostrarCategorias();
+            MostrarProductos(0, 0);
+
+        });
+
+        function MostrarProductos(_idcategoria, _idmarca) {
+
+            jQuery.ajax({
+                url: '@Url.Action("ListarProducto", "Tienda")',
+                type: "POST",
+                data: JSON.stringify({ idcategoria: _idcategoria, idmarca: _idmarca }),
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    $("#contenedor_producto").html("")
+                    $("#contenedor_producto").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, element) {
+
+                        $("<div>").addClass("col mb-5").append(
+                            $("<div>").addClass("card h-100").append(
+
+                                // Imagen
+                                $("<img>").addClass("card-img-top p-4").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+
+                                // Descripcion producto
+                                $("<div>").addClass("card-body px-4 py-2 d-flex flex-column").append(
+
+                                    $("<div>").addClass("text-center mb-auto").append(
+
+                                        $("<h5>").addClass("fw-bolder").text(element.Nombre),
+
+                                    ),
+                                    $("<p>").addClass("mt-auto mb-4 text-center price").text("S/ " + element.Precio.toFixed(2)),
+
+                                    // Botones
+                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent text-center").append(
+
+                                        @if (Session["Cliente"] != null) {
+
+                                            @:$("<button>").addClass("btn btn-outline-warning mt-auto mb-2 agregarcarrito").data("idproducto", element.IdProducto).text("Agregar al carrito"),
+
+                                        }
+
+                                        $("<a>").addClass("btn btn-outline-dark mt-auto")
+                                            .attr({ "href": '@Url.Action("DetalleProducto","Tienda")' + "?idproducto=" + element.IdProducto })
+                                            .text("Ver detalle")
+                                    )
+                                )
+                            )
+                        ).appendTo("#contenedor_producto")
+                    })
+                },
+                beforeSend: function () {
+                    $("#contenedor_producto").LoadingOverlay("show");
+                }
+            });
+        }
 
         function MostrarCategorias() {
             jQuery.ajax({
@@ -198,53 +208,6 @@
             MostrarMarca()
             MostrarProductos(0, 0)
         })
-
-        function MostrarProductos(_idcategoria, _idmarca) {
-
-            jQuery.ajax({
-                url: "@Url.Action("ListarProducto", "Tienda")",
-                type: "POST",
-                data: JSON.stringify({ idcategoria: _idcategoria, idmarca: _idmarca }),
-                datatype: "json",
-                contentType: "application/json; chartset=utf-8",
-                success: function (response) {
-
-                    $("#contenedor_producto").html("")
-                    $("#contenedor_producto").LoadingOverlay("hide");
-
-                    $.each(response.data, function (i, element) {
-                        $("<div>").addClass("col mb-5").append(
-                            $("<div>").addClass("card h-100").append(
-                                $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
-                                $("<div>").addClass("card-body px-4 py-2 d-flex flex-column").append(
-                                    $("<div>").addClass("text-center mb-auto").append(
-                                        $("<h5>").addClass("fw-bolder").text(element.Nombre)
-                                    ),
-                                    $("<p>").addClass("mt-4 text-center price").text("S/" + element.Precio.toFixed(2))
-                                ),
-                                $("<div>").addClass("card-footer p-4 pt-0 border-top-0 bg-transparent").append(
-
-                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent text-center").append(
-
-                                        @if (Session["Cliente"] != null) {
-                                         @:$("<button>").addClass("btn btn-outline-warning mt-auto mb-2 agregarcarrito").data("idproducto", element.IdProducto).text("Agregar al carrito "),
-                                        }
-
-                                        $("<a>").addClass("btn btn-outline-dark mt-auto")
-                                            .attr({ "href": "@Url.Action("DetalleProducto","Tienda")" + "?idproducto=" + element.IdProducto })
-                                            .text("Ver detalle")
-                                    )
-                                )
-                            )
-                        ).appendTo("#contenedor_producto")
-                    })
-                },
-                beforeSend: function () {
-                    $("#contenedor_producto").LoadingOverlay("show");
-                }
-
-            })
-        }
 
         // Boton aplicar filtro
         $("#btnaplicarfiltro").click(function () {

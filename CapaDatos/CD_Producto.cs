@@ -45,8 +45,9 @@ namespace CapaDatos
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 listado = new List<Producto>();
             }
 

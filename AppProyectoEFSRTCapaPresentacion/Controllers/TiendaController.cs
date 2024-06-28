@@ -1,6 +1,5 @@
 ﻿using CapaEntidades;
 using CapaNegocio;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +11,11 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
     {
         // GET: Tienda
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Carrito()
         {
             return View();
         }
@@ -59,10 +63,11 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
         {
             List<Producto> lista = new List<Producto>();
 
-            bool conversion;
+            bool conversion = false;
 
             lista = new CN_Productos().Listar().Select(p => new Producto()
             {
+
                 IdProducto = p.IdProducto,
                 Nombre = p.Nombre,
                 Descripcion = p.Descripcion,
@@ -71,17 +76,19 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
                 Precio = p.Precio,
                 Stock = p.Stock,
                 RutaImagen = p.RutaImagen,
-                Base64 = CN_Recursos.ConvertirBase64(Path.Combine(p.RutaImagen, p.Nombre), out conversion),
+                Base64 = CN_Recursos.ConvertirBase64(Path.Combine(p.RutaImagen, p.NombreImagen), out conversion),
                 Extension = Path.GetExtension(p.NombreImagen),
                 Activo = p.Activo
+
             }).Where(p =>
+
                 p.objCategoria.IdCategoria == (idcategoria == 0 ? p.objCategoria.IdCategoria : idcategoria) &&
                 p.objMarca.IdMarca == (idmarca == 0 ? p.objMarca.IdMarca : idmarca) &&
                 p.Stock > 0 && p.Activo == true
 
             ).ToList();
 
-            var jsonresult = Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+            var jsonresult = Json( new { data = lista }, JsonRequestBehavior.AllowGet);
             jsonresult.MaxJsonLength = int.MaxValue;
 
             return jsonresult;
@@ -232,6 +239,34 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             respuesta = new CN_Carrito().ElimninarCarrito(idcliente, idproducto);
 
             return Json(new { _respuesta = respuesta, _mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region UBICACION
+
+        [HttpPost]
+        public JsonResult ObtenerDepartamento()
+        {
+            List<Departamento> lista = new CN_Ubicacion().ObtenerDepartamentos();
+
+            return Json(new { _lista = lista }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ObtenerProvincia(string iddepartamento)
+        {
+            List<Provincia> lista = new CN_Ubicacion().ObtenerProvincias(iddepartamento);
+
+            return Json(new { _lista = lista }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult ObtenerDistrito(string idprovincia, string iddepartamento)
+        {
+            List<Distrito> lista = new CN_Ubicacion().ObtenerDistritos( idprovincia, iddepartamento);
+
+            return Json(new { _lista = lista }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
