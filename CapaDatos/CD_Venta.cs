@@ -33,11 +33,10 @@ namespace CapaDatos
                             {
                                 FechaVenta = dr[0].ToString(),
                                 NombreCliente = dr[1].ToString(),
-                                Nombre = dr[2].ToString(),
-                                Precio = Convert.ToDecimal(dr[3], new CultureInfo("es-PE")),
-                                Cantidad = Convert.ToInt32(dr[4]),
-                                Total = Convert.ToDecimal(dr[5], new CultureInfo("es-PE")),
-                                IdTransaccion = dr[6].ToString()
+                                Precio = Convert.ToDecimal(dr[2], new CultureInfo("es-PE")),
+                                Cantidad = Convert.ToInt32(dr[3]),
+                                Total = Convert.ToDecimal(dr[4], new CultureInfo("es-PE")),
+                                IdTransaccion = dr[5].ToString()
                             });
                         }
                     }
@@ -51,5 +50,47 @@ namespace CapaDatos
             return listado;
 
         }
+
+        public bool Registrar(Venta obj, DataTable DetalleVenta, out string Mensaje)
+        {
+            bool respuesta = false;
+            Mensaje = string.Empty;
+
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    SqlCommand cmd = new SqlCommand("usp_RegistrarVenta", cnx);
+                    cmd.Parameters.AddWithValue("IdCliente", obj.IdCliente);
+                    cmd.Parameters.AddWithValue("TotalProducto", obj.TotalProducto);
+                    cmd.Parameters.AddWithValue("MontoTotal", obj.MontoTotal);
+                    cmd.Parameters.AddWithValue("Contacto", obj.Contacto);
+                    cmd.Parameters.AddWithValue("IdDistrito", obj.IdDistrito);
+                    cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
+                    cmd.Parameters.AddWithValue("Direccion", obj.Direccion);
+                    cmd.Parameters.AddWithValue("IdTransaccion", obj.IdTransaccion);
+                    cmd.Parameters.AddWithValue("DetalleVenta", DetalleVenta);
+
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cnx.Open();
+                    cmd.ExecuteNonQuery();
+
+                    respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+                Mensaje = ex.Message;
+            }
+
+            return respuesta;
+
+        }
+
     }
 }

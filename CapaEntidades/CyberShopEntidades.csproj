@@ -48,6 +48,10 @@
     <Compile Include="DetalleVenta.cs" />
     <Compile Include="Distrito.cs" />
     <Compile Include="Marca.cs" />
+    <Compile Include="PayPal\CheckOut_Order.cs" />
+    <Compile Include="PayPal\Response_Capture.cs" />
+    <Compile Include="PayPal\Response_CheckOut.cs" />
+    <Compile Include="PayPal\Response_Paypal.cs" />
     <Compile Include="Producto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provincia.cs" />

@@ -2,6 +2,9 @@
 using CapaEntidades;
 using System.Collections.Generic;
 
+using CapaNegocio;
+using System.Data;
+
 namespace CapaNegocio
 {
     public class CN_Venta
@@ -12,5 +15,15 @@ namespace CapaNegocio
         {
             return objCapaDatos.ListarVentas(fechaini, fechafin, idtransaccion);
         }
+
+        public bool Registrar(Venta obj, DataTable DetalleVenta, out string Mensaje)
+        {
+
+            return objCapaDatos.Registrar(obj, DetalleVenta, out Mensaje);
+        }
+
+
     }
+
+
 }

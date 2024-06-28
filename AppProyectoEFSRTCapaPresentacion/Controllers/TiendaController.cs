@@ -1,8 +1,12 @@
 ﻿using CapaEntidades;
 using CapaNegocio;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace AppProyectoEFSRTCapaPresentacion.Controllers
@@ -268,6 +272,65 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
 
             return Json(new { _lista = lista }, JsonRequestBehavior.AllowGet);
         }
+
+        #endregion
+
+        #region PROCESAR PAGO
+        [HttpPost]
+        public async Task<JsonResult> ProcesarPago(List<Carrito> oListaCarrito, Venta oVenta)
+        {
+            decimal total = 0;
+
+            DataTable detalle_venta = new DataTable();
+            detalle_venta.Locale = new CultureInfo("en-PE");
+            detalle_venta.Columns.Add("IdProducto", typeof(string));
+            detalle_venta.Columns.Add("Cantidad", typeof(int));
+            detalle_venta.Columns.Add("Total", typeof(decimal));
+
+            foreach(Carrito carrito in oListaCarrito)
+            {
+                decimal subTotal = Convert.ToDecimal(carrito.Cantidad.ToString()) * carrito.objProducto.Precio;
+                total += subTotal;
+
+                detalle_venta.Rows.Add(new object[]
+                {
+                    carrito.objProducto.IdProducto,
+                    carrito.Cantidad,
+                    subTotal
+                });
+            }
+            oVenta.MontoTotal = total;
+            oVenta.IdCliente = ((Cliente)Session["Cliente"]).IdCliente;
+
+            TempData ["Venta"] = oVenta;
+            TempData["DetalleVenta"] = detalle_venta;
+
+            return Json(new {Status = true, Link = "/Tienda/PagoEfectuado?idTransaccion=code0001&status=true"}, JsonRequestBehavior.AllowGet);
+            
+        }
+
+        public async Task<ActionResult> PagoEfectuado()
+        {
+            string idTransaccion = Request.QueryString["idTransaccion"];
+            bool status = Convert.ToBoolean(Request.QueryString["idTransaccion"]);
+
+            ViewData["Status"] = status;
+            if (status)
+            {
+                Venta oVenta = (Venta)TempData["Venta"];
+                DataTable detalle_venta = (DataTable)TempData["DetalleVenta"];
+
+                oVenta.IdTransaccion = idTransaccion;
+                string mensaje = string.Empty;
+                bool respuesta = new CN_Venta().Registrar(oVenta, detalle_venta, out mensaje);
+
+                ViewData["IdTransaccion"] = oVenta.IdTransaccion;
+
+            }
+            return View();
+
+        }
+
 
         #endregion
 

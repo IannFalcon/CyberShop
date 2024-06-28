@@ -140,7 +140,7 @@
                                     // Eliminar producto
                                     $("<div>").addClass("col-sm-2 align-self-center").append(
                                         $("<button>").addClass("btn btn-outline-danger btn-eliminar").append(
-                                            $("<i>").addClass("far fa-trash-alt md-2"), " Eliminar")
+                                            $("<i>").addClass("far fa-trash-alt md-2"), " Eliminar").data("idproducto", item.objProducto.IdProducto)
                                     )
                                 )
                             )
@@ -283,12 +283,13 @@
             var _idproducto = $(input).data("objProducto").IdProducto;
 
             jQuery.ajax({
-                url: '@Url.Action("OperacionCarrito", "Home")',
+                url: '@Url.Action("OperacionCarrito", "Tienda")',
                 type: "POST",
                 data: JSON.stringify({ idproducto: _idproducto, sumar: true }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
+                    $(btn).LoadingOverlay("hide")
 
                     if (data.respuesta) {
 
@@ -297,25 +298,148 @@
                         sumarTotal()
 
                     } else {
-
-                        Swal.fire({
-                            title: "Oops...",
-                            text: data.mensaje,
-                            icon: "warning"
-                        });
-
+                        //Swal.fire({
+                            //title: "Oops...",
+                            //text: data.mensaje,
+                            //icon: "warning"
+                        //});
+                        swal("", data.mensaje, "warning")
                     }
-
-                },
-                error: function (error) {
-
                 },
                 beforeSend: function () {
-
+                    $(btn).LoadingOverlay("show")
+                },
+                error: function (error) {
+                    $(btn).LoadingOverlay("hide")
                 }
             });
 
         });
+
+
+    $(document).on("click", ".btn-restar", function () {
+
+    var contenedor = $(this).parent("div.d-flex")
+    var input = $(contenedor).find("input.input-cantidad")
+    var btn = $(this)
+    var _idproducto = $(input).data("objProducto").IdProducto;
+    var cantidad = parseInt($(input).val()) - 1;
+        if (cantidad >= 1) {
+
+        jQuery.ajax({
+                url: '@Url.Action("OperacionCarrito", "Tienda")',
+            type: "POST",
+            data: JSON.stringify({ idproducto: _idproducto, sumar: false }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $(btn).LoadingOverlay("hide")
+
+                    if (data.respuesta) {
+
+                        $(input).val(cantidad)
+                        sumarTotal()
+                    } else {
+                        //Swal.fire({
+                            //title: "Oops...",
+                            //text: data.mensaje,
+                            //icon: "warning"
+                        //});
+                        swal("", data.mensaje, "warning")
+                    }
+                },
+                beforeSend: function () {
+                    $(btn).LoadingOverlay("show")
+                },
+                error: function (error) {
+                    $(btn).LoadingOverlay("hide")
+                }
+        });
+
+
+        }
+    });
+
+    $(document).on("click", ".btn-eliminar", function () {
+
+        var idproducto = $(this).data("idproducto");
+        var card_producto = $(this).parent("div.car_producto");
+            
+            jQuery.ajax({
+                    url: '@Url.Action("EliminarCarrito", "Tienda")',
+                type: "POST",
+                data: JSON.stringify({ idproducto: _idproducto}),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        if (data.respuesta) {
+
+                            card_producto.remove();
+                            MostrarCantidadCarrito();
+                            sumarTotal();
+                            
+                        } else {
+                            //Swal.fire({
+                                //title: "Oops...",
+                                //text: data.mensaje,
+                                //icon: "warning"
+                            //});
+                            swal("", data.mensaje, "warning")
+                        }
+                    },
+                                      
+            });
+    });
+
+        function RealizarPago() {
+            if (parseInt($("#cantidadcarrito")).text == 0) { 
+                swal("", "No existen productos en el carrito", "warning");
+                return
+            }
+            if ($("#cboDistrito").val() == null || $("#txtNombreContacto").val() == "" || $("#txtDireccion").val() == "" || $("#txtTelefono").val() == "") {
+                swal("", "Debe completar los datos de detalle de envio", "warning");
+                return
+            }
+
+            var venta = {
+                TotalProducto : $("input.input-cantidad").length,
+                Montototal : 0,
+                Contacto: $("#txtNombreContacto").val(),
+                IdDistrito: $("#cboDistrito").val(),
+                Telefono : $("#txtTelefono").val(),
+                    Direccion : $("#txtDireccion").val()
+            }
+            var lista_carrito = [];
+            $("input.input-cantidad").each(function (i) {
+                var producto = $(this).data("objProducto");
+                var cantidad = parseFloat($(this).val())
+
+                lista_carrito.push({
+                    objProducto: producto,
+                    Cantidad: cantidad
+                })
+            })
+
+            $.ajax({
+                url: '@Url.Action("ProcesarPago","Tienda")',
+                data: JSON.stringify({ oListaCarrito: lista_carrito, oVenta: venta }),
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $.LoadingOverlay("hide")
+
+                    if (data.Status) {
+                        window.location.href = data.link;
+                    } else {
+                        swal("", "Intentelo nuevamente más tarde", "warning");
+                    }
+                },
+                beforeSend: function () { $.LoadingOverlay("show") },
+                error: function (error) { $.LoadingOverlay("hide") }
+        }
 
     </script>
     
