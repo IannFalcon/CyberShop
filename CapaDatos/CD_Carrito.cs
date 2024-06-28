@@ -31,7 +31,7 @@ namespace CapaDatos
                    
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 resultado = false;
 
@@ -97,7 +97,7 @@ namespace CapaDatos
             catch (Exception ex)
             {
                 resultado = 0;
-
+                Console.WriteLine(ex.Message);
             }
 
             return resultado;
@@ -175,7 +175,7 @@ namespace CapaDatos
             catch (Exception ex)
             {
                 resultado = false;
-
+                Console.WriteLine(ex.Message);
             }
 
             return resultado;

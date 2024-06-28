@@ -85,12 +85,19 @@
             </div>
         </div>
     </div>
+</div>
 
 @section scripts{
 
     <script>
 
         $(document).ready(function () {
+
+            ListarProductosCarrito();
+
+        });
+
+        function ListarProductosCarrito(){
 
             jQuery.ajax({
                 url: '@Url.Action("ListarProductosCarrito", "Tienda")',
@@ -127,7 +134,7 @@
 
                                     // Cantidad producto
                                     $("<div>").addClass("col-sm-2 align-self-center").append(
-                                        $("<div>").addClass("d-flex").append(
+                                        $("<div>").addClass("d-flex contenedor-cantidad").append(
                                             $("<button>").addClass("btn btn-dark btn-restar rounded-0").append($("<i>").addClass("fas fa-minus")),
                                             $("<input>").addClass("form-control input-cantidad p-1 text-center rounded-0").attr({ "disabled": "disabled" })
                                                 .css({ "width": "40px" })
@@ -152,8 +159,7 @@
 
             ListarDepartamentos();
 
-        });
-
+        }
 
         function ListarDepartamentos() {
 
@@ -275,11 +281,12 @@
             return sumaTotal;
         }
 
+        // Boton sumar
         $(document).on("click", ".btn-sumar", function () {
 
-            var contenedor = $(this).parent("div.d-flex")
-            var input = $(contenedor).find("input.input-cantidad")
-            var btn = $(this)
+            var contenedor = $(this).parent("div.contenedor-cantidad");
+            var input = $(contenedor).find("input.input-cantidad");
+            var btn = $(this);
             var _idproducto = $(input).data("objProducto").IdProducto;
 
             jQuery.ajax({
@@ -289,114 +296,160 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
+
                     $(btn).LoadingOverlay("hide")
 
-                    if (data.respuesta) {
+                    if (data._respuesta) {
 
                         var cantidad = parseInt($(input).val()) + 1;
-                        $(input).val(cantidad)
-                        sumarTotal()
+                        $(input).val(cantidad);
+                        sumarTotal();
 
                     } else {
-                        //Swal.fire({
-                            //title: "Oops...",
-                            //text: data.mensaje,
-                            //icon: "warning"
-                        //});
-                        swal("", data.mensaje, "warning")
+
+                        Swal.fire({
+                            title: "Oops...",
+                            text: data._mensaje,
+                            icon: "error"
+                        });
+
                     }
                 },
-                beforeSend: function () {
-                    $(btn).LoadingOverlay("show")
-                },
                 error: function (error) {
+
                     $(btn).LoadingOverlay("hide")
+                    console.log(error)
+
+                },
+                beforeSend: function () {
+
+                    $(btn).LoadingOverlay("show")
+
                 }
             });
 
         });
 
+        // Boton restar
+        $(document).on("click", ".btn-restar", function () {
 
-    $(document).on("click", ".btn-restar", function () {
+            var contenedor = $(this).parent("div.contenedor-cantidad");
+            var input = $(contenedor).find("input.input-cantidad");
+            var btn = $(this);
+            var _idproducto = $(input).data("objProducto").IdProducto;
+            var cantidad = parseInt($(input).val()) - 1;
 
-    var contenedor = $(this).parent("div.d-flex")
-    var input = $(contenedor).find("input.input-cantidad")
-    var btn = $(this)
-    var _idproducto = $(input).data("objProducto").IdProducto;
-    var cantidad = parseInt($(input).val()) - 1;
-        if (cantidad >= 1) {
+            if (cantidad >= 1) {
 
-        jQuery.ajax({
-                url: '@Url.Action("OperacionCarrito", "Tienda")',
-            type: "POST",
-            data: JSON.stringify({ idproducto: _idproducto, sumar: false }),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (data) {
-                    $(btn).LoadingOverlay("hide")
-
-                    if (data.respuesta) {
-
-                        $(input).val(cantidad)
-                        sumarTotal()
-                    } else {
-                        //Swal.fire({
-                            //title: "Oops...",
-                            //text: data.mensaje,
-                            //icon: "warning"
-                        //});
-                        swal("", data.mensaje, "warning")
-                    }
-                },
-                beforeSend: function () {
-                    $(btn).LoadingOverlay("show")
-                },
-                error: function (error) {
-                    $(btn).LoadingOverlay("hide")
-                }
-        });
-
-
-        }
-    });
-
-    $(document).on("click", ".btn-eliminar", function () {
-
-        var idproducto = $(this).data("idproducto");
-        var card_producto = $(this).parent("div.car_producto");
-            
-            jQuery.ajax({
-                    url: '@Url.Action("EliminarCarrito", "Tienda")',
-                type: "POST",
-                data: JSON.stringify({ idproducto: _idproducto}),
+                jQuery.ajax({
+                    url: '@Url.Action("OperacionCarrito", "Tienda")',
+                    type: "POST",
+                    data: JSON.stringify({ idproducto: _idproducto, sumar: false }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
 
-                        if (data.respuesta) {
+                        $(btn).LoadingOverlay("hide")
 
-                            card_producto.remove();
-                            MostrarCantidadCarrito();
+                        if (data._respuesta) {
+
+                            $(input).val(cantidad);
                             sumarTotal();
-                            
+
                         } else {
-                            //Swal.fire({
-                                //title: "Oops...",
-                                //text: data.mensaje,
-                                //icon: "warning"
-                            //});
-                            swal("", data.mensaje, "warning")
+
+                            Swal.fire({
+                                title: "Oops...",
+                                text: data._mensaje,
+                                icon: "error"
+                            });
+
                         }
                     },
-                                      
+                    error: function (error) {
+
+                        $(btn).LoadingOverlay("hide")
+                        console.log(error)
+
+                    },
+                    beforeSend: function () {
+
+                        $(btn).LoadingOverlay("show")
+
+                    }
+                });
+            }
+
+        });
+
+        // Boton eliminar
+        $(document).on("click", ".btn-eliminar", function () {
+
+            var _idproducto = $(this).data("idproducto");
+            var card_producto = $(this).parents("div.card_producto");
+
+            jQuery.ajax({
+
+                url: '@Url.Action("EliminarCarrito", "Tienda")',
+                type: "POST",
+                data: JSON.stringify({ idproducto: _idproducto }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    if (data._respuesta) {
+
+                        Swal.fire({
+                            title: "Eliminar",
+                            text: "¿Deseas eliminar el producto del carrito?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Si",
+                            cancelButtonText: "No"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                                card_producto.remove();
+                                MostrarCantidadCarrito();
+                                sumarTotal();
+
+                                window.location.href = '@Url.Action("Carrito", "Tienda")'
+
+                            } else {
+
+                                Swal.fire({
+                                    title: "Operacion cancelada",
+                                    text: "El producto no fue eliminado",
+                                    icon: "success"
+                                });
+
+                            }
+
+                        });
+
+                    } else {
+
+                        Swal.fire({
+                            title: "Oops...",
+                            text: data._mensaje,
+                            icon: "error"
+                        });
+
+                    }
+
+                }
+
             });
-    });
+
+        });
 
         function RealizarPago() {
-            if (parseInt($("#cantidadcarrito")).text == 0) { 
+
+            if (parseInt($("#cantidadcarrito")).text == 0) {
                 swal("", "No existen productos en el carrito", "warning");
                 return
             }
+
             if ($("#cboDistrito").val() == null || $("#txtNombreContacto").val() == "" || $("#txtDireccion").val() == "" || $("#txtTelefono").val() == "") {
                 swal("", "Debe completar los datos de detalle de envio", "warning");
                 return
@@ -410,7 +463,9 @@
                 Telefono : $("#txtTelefono").val(),
                     Direccion : $("#txtDireccion").val()
             }
+
             var lista_carrito = [];
+
             $("input.input-cantidad").each(function (i) {
                 var producto = $(this).data("objProducto");
                 var cantidad = parseFloat($(this).val())
@@ -439,6 +494,7 @@
                 },
                 beforeSend: function () { $.LoadingOverlay("show") },
                 error: function (error) { $.LoadingOverlay("hide") }
+            })
         }
 
     </script>

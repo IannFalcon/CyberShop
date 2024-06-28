@@ -43,7 +43,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
 
         #endregion
 
-        #region LISTADO DE PRODUCTOS
+        #region FILTROS
 
         [HttpGet]
         public JsonResult ListaCategoria()
@@ -60,42 +60,6 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             List<Marca> lista = new List<Marca>();
             lista = new CN_Marca().ListarMarcaporCategoria(idcategoria);
             return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public JsonResult ListarProducto(int idcategoria, int idmarca)
-        {
-            List<Producto> lista = new List<Producto>();
-
-            bool conversion = false;
-
-            lista = new CN_Productos().Listar().Select(p => new Producto()
-            {
-
-                IdProducto = p.IdProducto,
-                Nombre = p.Nombre,
-                Descripcion = p.Descripcion,
-                objMarca = p.objMarca,
-                objCategoria = p.objCategoria,
-                Precio = p.Precio,
-                Stock = p.Stock,
-                RutaImagen = p.RutaImagen,
-                Base64 = CN_Recursos.ConvertirBase64(Path.Combine(p.RutaImagen, p.NombreImagen), out conversion),
-                Extension = Path.GetExtension(p.NombreImagen),
-                Activo = p.Activo
-
-            }).Where(p =>
-
-                p.objCategoria.IdCategoria == (idcategoria == 0 ? p.objCategoria.IdCategoria : idcategoria) &&
-                p.objMarca.IdMarca == (idmarca == 0 ? p.objMarca.IdMarca : idmarca) &&
-                p.Stock > 0 && p.Activo == true
-
-            ).ToList();
-
-            var jsonresult = Json( new { data = lista }, JsonRequestBehavior.AllowGet);
-            jsonresult.MaxJsonLength = int.MaxValue;
-
-            return jsonresult;
         }
 
         #endregion
@@ -133,11 +97,9 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
                 objMarca = p.objMarca,
                 Precio = p.Precio,
                 Stock = p.Stock,
-
                 RutaImagen = p.RutaImagen,
                 Base64 = CN_Recursos.ConvertirBase64(Path.Combine(p.RutaImagen, p.NombreImagen), out conversion),
                 Extension = Path.GetExtension(p.NombreImagen),
-
                 Activo = p.Activo
 
             }).Where(p => 
@@ -226,9 +188,9 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
 
             string mensaje = string.Empty;
 
-            respuesta = new CN_Carrito().OperacionCarrito(idcliente, idproducto, true, out mensaje);
+            respuesta = new CN_Carrito().OperacionCarrito(idcliente, idproducto, sumar, out mensaje);
 
-            return Json(new { data = respuesta }, JsonRequestBehavior.AllowGet);
+            return Json(new { _respuesta = respuesta, _mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -276,6 +238,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
         #endregion
 
         #region PROCESAR PAGO
+
         [HttpPost]
         public async Task<JsonResult> ProcesarPago(List<Carrito> oListaCarrito, Venta oVenta)
         {
@@ -287,7 +250,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             detalle_venta.Columns.Add("Cantidad", typeof(int));
             detalle_venta.Columns.Add("Total", typeof(decimal));
 
-            foreach(Carrito carrito in oListaCarrito)
+            foreach (Carrito carrito in oListaCarrito)
             {
                 decimal subTotal = Convert.ToDecimal(carrito.Cantidad.ToString()) * carrito.objProducto.Precio;
                 total += subTotal;
@@ -302,7 +265,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             oVenta.MontoTotal = total;
             oVenta.IdCliente = ((Cliente)Session["Cliente"]).IdCliente;
 
-            TempData ["Venta"] = oVenta;
+            TempData["Venta"] = oVenta;
             TempData["DetalleVenta"] = detalle_venta;
 
             return Json(new {Status = true, Link = "/Tienda/PagoEfectuado?idTransaccion=code0001&status=true"}, JsonRequestBehavior.AllowGet);

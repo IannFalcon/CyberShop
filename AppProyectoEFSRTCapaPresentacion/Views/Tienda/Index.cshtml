@@ -54,7 +54,7 @@
                 <div class="row mb-3">
                     <div class="col-sm-12">
                         <div class="d-grid gap-2">
-                            <button id="btnaplicarfiltro" class="btn btn-outline-dark btn-bloc" type="button">
+                            <button id="btnaplicarfiltro" class="btn btn-outline-dark btn-block" type="button">
                                 <i class="fas fa-filter"></i>Aplicar Filtros
                             </button>
                         </div>
@@ -86,7 +86,7 @@
         function MostrarProductos(_idcategoria, _idmarca) {
 
             jQuery.ajax({
-                url: '@Url.Action("ListarProducto", "Tienda")',
+                url: '@Url.Action("ListarProductos", "Tienda")',
                 type: "POST",
                 data: JSON.stringify({ idcategoria: _idcategoria, idmarca: _idmarca }),
                 datatype: "json",
@@ -119,7 +119,7 @@
 
                                         @if (Session["Cliente"] != null) {
 
-                                            @:$("<button>").addClass("btn btn-outline-warning mt-auto mb-2 agregarcarrito").data("idproducto", element.IdProducto).text("Agregar al carrito"),
+                                            @:$("<button>").addClass("btn btn-outline-warning mt-auto mb-2 agregarcarrito").data("idproducto", element.IdProducto).append($("<i>").addClass("fas fa-cart-plus me-2"), "Agregar al carrito"),
 
                                         }
 

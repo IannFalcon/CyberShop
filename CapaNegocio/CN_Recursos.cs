@@ -61,6 +61,7 @@ namespace CapaNegocio
             catch (Exception ex)
             {
                 result = false;
+                Console.WriteLine(ex.Message);
             }
 
             return result;
