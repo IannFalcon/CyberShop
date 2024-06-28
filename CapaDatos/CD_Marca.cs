@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace CapaDatos
 {
@@ -144,6 +145,48 @@ namespace CapaDatos
 
             return resultado;
 
+        }
+
+        public List<Marca> ListarMarcaporCategoria(int idcategoria)
+        {
+            List<Marca> listado = new List<Marca>();
+
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.AppendLine("SELECT DISTINCT m.IdMarca, m.Descripcion FROM PRODUCTO p");
+                    sb.AppendLine("INNER JOIN CATEGORIA c ON c.IdCategoria = p.IdCategoria");
+                    sb.AppendLine("INNER JOIN MARCA m ON m.IdMarca = p.IdMarca AND m.Activo = 1");
+                    sb.AppendLine("WHERE c.IdCategoria = IIF(@idcategoria = 0, c.IdCategoria, @idcategoria)");
+
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), cnx);
+
+                    cmd.Parameters.AddWithValue("@idcategoria", idcategoria);
+
+                    cnx.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            listado.Add(new Marca()
+                            {
+                                IdMarca = Convert.ToInt32(dr["IdMarca"]),
+                                Descripcion = dr["Descripcion"].ToString(),
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                listado = new List<Marca>();
+            }
+
+            return listado;
         }
 
     }

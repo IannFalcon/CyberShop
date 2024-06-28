@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CapaEntidades;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -95,6 +97,84 @@ namespace CapaDatos
             catch (Exception ex)
             {
                 resultado = 0;
+
+            }
+
+            return resultado;
+
+        }
+
+        public List<Carrito> ListarCarrito(int idcliente)
+        {
+            List<Carrito> lista = new List<Carrito>();
+
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    string query = "SELECT * FROM OBTENER_CARRITO(@idcliente)";
+
+                    SqlCommand cmd = new SqlCommand(query, cnx);
+                    cmd.Parameters.AddWithValue("@idcliente", idcliente);
+                    cmd.CommandType = CommandType.Text;
+
+                    cnx.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new Carrito()
+                            {
+                                objProducto = new Producto()
+                                {
+                                    IdProducto = Convert.ToInt32(dr[0]),
+                                    objMarca = new Marca() { Descripcion = dr[1].ToString() },
+                                    Nombre = dr[2].ToString(),
+                                    Precio = Convert.ToDecimal(dr[3]),
+                                    RutaImagen = dr[5].ToString(),
+                                    NombreImagen = dr[6].ToString()
+                                },
+                                Cantidad = Convert.ToInt32(dr[4])
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                lista = new List<Carrito>();
+            }
+
+            return lista;
+        }
+
+        public bool ElimninarCarrito(int idcliente, int idproducto)
+        {
+            bool resultado = true;
+
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    SqlCommand cmd = new SqlCommand("ELIMINAR_CARRITO", cnx);
+
+                    cmd.Parameters.AddWithValue("IdCliente", idcliente);
+                    cmd.Parameters.AddWithValue("IdProducto", idproducto);
+
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cnx.Open();
+                    cmd.ExecuteNonQuery();
+
+                    resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado = false;
 
             }
 

@@ -158,7 +158,7 @@
     <Content Include="Content\solid.min.css" />
     <Content Include="Content\svg-with-js.css" />
     <Content Include="Content\svg-with-js.min.css" />
-    <Content Include="Content\sweetalert.css" />
+    <Content Include="Content\sweetalert2.min.css" />
     <Content Include="Content\v4-shims.css" />
     <Content Include="Content\v4-shims.min.css" />
     <Content Include="favicon.ico" />
@@ -225,7 +225,7 @@
     <Content Include="Scripts\loadingoverlay.js" />
     <Content Include="Scripts\loadingoverlay.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\sweetalert2.all.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -258,6 +258,7 @@
     <Content Include="Views\Tienda\Index.cshtml" />
     <Content Include="Views\Acceso\Registrar.cshtml" />
     <Content Include="Views\Acceso\LoginCliente.cshtml" />
+    <Content Include="Views\Tienda\DetalleProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
