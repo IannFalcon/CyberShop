@@ -487,7 +487,11 @@
                     $.LoadingOverlay("hide")
 
                     if (data.Status) {
-                        window.location.href = data.link;
+                        var jsoresult = data.response;
+                        var links = jsoresult.links;
+                        var resultado = links.find(item => item.rel === "approve");
+
+                        window.location.href = resultado.href
                     } else {
                         swal("", "Intentelo nuevamente más tarde", "warning");
                     }

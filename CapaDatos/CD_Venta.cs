@@ -92,5 +92,49 @@ namespace CapaDatos
 
         }
 
+        public List<DetalleVenta> ListarCompras(int idcliente)
+        {
+            List<DetalleVenta> lista = new List<DetalleVenta>();
+
+            try
+            {
+                using (SqlConnection cnx = new SqlConnection(Conexion.con))
+                {
+                    string query = "SELECT * FROM fn_ListarCompra(@idcliente)";
+
+                    SqlCommand cmd = new SqlCommand(query, cnx);
+                    cmd.Parameters.AddWithValue("@idcliente", idcliente);
+                    cmd.CommandType = CommandType.Text;
+
+                    cnx.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new DetalleVenta()
+                            {
+                                objProducto = new Producto()
+                                {                                
+                                    Nombre = dr["Nombre"].ToString(),
+                                    Precio = Convert.ToDecimal(dr["Precio"], new CultureInfo("es-PE")),
+                                    RutaImagen = dr["RutaImagen"].ToString(),
+                                    NombreImagen = dr["NombreImagen"].ToString()
+                                },
+                                Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                                Total = Convert.ToDecimal(dr["Total"], new CultureInfo("es-PE")),
+                                IdTransaccion = dr["IdTransaccion"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                lista = new List<DetalleVenta>();
+            }
+
+            return lista;
+        }
     }
 }

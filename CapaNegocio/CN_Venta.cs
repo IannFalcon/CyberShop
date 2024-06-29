@@ -22,6 +22,11 @@ namespace CapaNegocio
             return objCapaDatos.Registrar(obj, DetalleVenta, out Mensaje);
         }
 
+        public List<DetalleVenta> ListarCompras(int idcliente)
+        {
+            return objCapaDatos.ListarCompras(idcliente);
+        }
+
 
     }
 
