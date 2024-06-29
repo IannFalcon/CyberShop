@@ -18,7 +18,6 @@ namespace CapaNegocio
 
         public bool Registrar(Venta obj, DataTable DetalleVenta, out string Mensaje)
         {
-
             return objCapaDatos.Registrar(obj, DetalleVenta, out Mensaje);
         }
 
@@ -27,8 +26,6 @@ namespace CapaNegocio
             return objCapaDatos.ListarCompras(idcliente);
         }
 
-
     }
-
 
 }

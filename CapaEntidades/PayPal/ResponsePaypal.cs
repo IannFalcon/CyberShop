@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CapaEntidades.PayPal
 {
-    public class Response_Paypal<T>
+    public class ResponsePaypal<T>
     {
-        public bool Status { get; set; }
-        public T Response { get; set; }
+        public bool status { get; set; }
+        public T response { get; set; }
     }
 }

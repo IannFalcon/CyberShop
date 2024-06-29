@@ -445,28 +445,43 @@
 
         function RealizarPago() {
 
-            if (parseInt($("#cantidadcarrito")).text == 0) {
-                swal("", "No existen productos en el carrito", "warning");
+            if (parseInt($("#cantidadCarrito").text()) == 0) {
+
+                Swal.fire({
+                    title: "Advertencia",
+                    text: "No existen productos en el carrito",
+                    icon: "warning"
+                });
+
                 return
             }
 
             if ($("#cboDistrito").val() == null || $("#txtNombreContacto").val() == "" || $("#txtDireccion").val() == "" || $("#txtTelefono").val() == "") {
-                swal("", "Debe completar los datos de detalle de envio", "warning");
+
+                Swal.fire({
+                    title: "Advertencia",
+                    text: "Debe completar los datos de detalle de envio",
+                    icon: "warning"
+                });
+
                 return
             }
 
             var venta = {
-                TotalProducto : $("input.input-cantidad").length,
-                Montototal : 0,
+                TotalProducto: $("input.input-cantidad").length,
+                MontoTotal: 0,
                 Contacto: $("#txtNombreContacto").val(),
                 IdDistrito: $("#cboDistrito").val(),
-                Telefono : $("#txtTelefono").val(),
-                    Direccion : $("#txtDireccion").val()
+                Telefono: $("#txtTelefono").val(),
+                Direccion: $("#txtDireccion").val()
             }
 
             var lista_carrito = [];
 
             $("input.input-cantidad").each(function (i) {
+
+                console.log($(this).data("objProducto"))
+
                 var producto = $(this).data("objProducto");
                 var cantidad = parseFloat($(this).val())
 
@@ -476,28 +491,49 @@
                 })
             })
 
-            $.ajax({
+            jQuery.ajax({
                 url: '@Url.Action("ProcesarPago","Tienda")',
-                data: JSON.stringify({ oListaCarrito: lista_carrito, oVenta: venta }),
                 type: 'POST',
+                data: JSON.stringify({ oListaCarrito: lista_carrito, oVenta: venta }),
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
 
-                    $.LoadingOverlay("hide")
+                    console.log(data)
 
-                    if (data.Status) {
-                        var jsoresult = data.response;
-                        var links = jsoresult.links;
+                    $.LoadingOverlay("hide");
+
+                    if (data.status) {
+
+                        var jsonresult = data.response;
+                        var links = jsonresult.links;
                         var resultado = links.find(item => item.rel === "approve");
 
                         window.location.href = resultado.href
+
                     } else {
-                        swal("", "Intentelo nuevamente más tarde", "warning");
+
+                        Swal.fire({
+                            title: "Advertencia",
+                            text: "Intentelo nuevamente más tarde",
+                            icon: "warning"
+                        });
+
                     }
                 },
-                beforeSend: function () { $.LoadingOverlay("show") },
-                error: function (error) { $.LoadingOverlay("hide") }
+                beforeSend: function () {
+
+                    $.LoadingOverlay("show");
+
+                },
+                error: function (xhr, status, error) {
+
+                    $.LoadingOverlay("hide");
+                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText;
+
+                    console.log(errorMessage)
+
+                }
             })
         }
 

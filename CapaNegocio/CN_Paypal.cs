@@ -11,76 +11,93 @@ using Newtonsoft;
 
 using CapaEntidades.PayPal;
 using Newtonsoft.Json;
+using System.Diagnostics;
+using CapaEntidades;
 
 namespace CapaNegocio
 {
     public class CN_Paypal
     {
         private static string urlpaypal = ConfigurationManager.AppSettings["UrlPaypal"];
-        private static string clientID = ConfigurationManager.AppSettings["ClientID"];
+        private static string clientId = ConfigurationManager.AppSettings["ClientID"];
         private static string secret = ConfigurationManager.AppSettings["Secret"];
+        private static string endpoint = "/v2/checkout/orders";
 
-        public async Task<Response_Paypal<Response_CheckOut>> crearSolicitud(CheckOut_Order orden)
+        public async Task<ResponsePaypal<ResponseCheckOut>> CrearSolicitud(CheckOutOrder orden)
         {
-            Response_Paypal<Response_CheckOut> responsePaypal = new Response_Paypal<Response_CheckOut>();
+            ResponsePaypal<ResponseCheckOut> response_paypal = new ResponsePaypal<ResponseCheckOut>();
 
-            using (var client = new HttpClient()) { 
-
-                client.BaseAddress = new Uri(urlpaypal);
-
-                var authToken = Encoding.ASCII.GetBytes($"{clientID} : {secret}");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authToken));
-            
-                var json = JsonConvert.SerializeObject(orden);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync("/v2/checkout/orders", data);
-
-                responsePaypal.Status = response.IsSuccessStatusCode;
-                if(response.IsSuccessStatusCode)
+            using (var client = new HttpClient())
+            {
+                try
                 {
-                    string jsonrespuesta = response.Content.ReadAsStringAsync().Result;
+                    client.BaseAddress = new Uri(urlpaypal);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    Response_CheckOut checkout = JsonConvert.DeserializeObject<Response_CheckOut>(jsonrespuesta);
-                    responsePaypal.Response = checkout;
+                    var authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{clientId}:{secret}"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+
+                    var json = JsonConvert.SerializeObject(orden);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync(endpoint, content);
+
+                    response_paypal.status = response.IsSuccessStatusCode;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine($"Respuesta JSON: {jsonResponse}");
+
+                        ResponseCheckOut checkout = JsonConvert.DeserializeObject<ResponseCheckOut>(jsonResponse);
+                        response_paypal.response = checkout;
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Error HTTP: {response.StatusCode} - {response.ReasonPhrase}");
+                        response_paypal.response = null;
+                    }
 
                 }
-                return responsePaypal;
+                catch (Exception ex)
+                {
+                    response_paypal.status = false;
+                    Debug.WriteLine($"Error en la solicitud: {ex.Message}");
+                }
+
+                return response_paypal;
             }
         }
 
-        public async Task<Response_Paypal<Response_Capture>> AprobaPago(string token)
+        public async Task<ResponsePaypal<ResponseCapture>> AprobarPago(string token)
         {
-            Response_Paypal<Response_Capture> responsePaypal = new Response_Paypal<Response_Capture>();
+            ResponsePaypal<ResponseCapture> response_paypal = new ResponsePaypal<ResponseCapture>();
 
             using (var client = new HttpClient())
             {
 
                 client.BaseAddress = new Uri(urlpaypal);
 
-                var authToken = Encoding.ASCII.GetBytes($"{clientID} : {secret}");
+                var authToken = Encoding.ASCII.GetBytes($"{clientId}:{secret}");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authToken));
 
                 var data = new StringContent("{}", Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await client.PostAsync($"/v2/checkout/orders/{token}/capture", data);
 
-                responsePaypal.Status = response.IsSuccessStatusCode;
+                response_paypal.status = response.IsSuccessStatusCode;
+
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonrespuesta = response.Content.ReadAsStringAsync().Result;
 
-                    Response_Capture capture = JsonConvert.DeserializeObject<Response_Capture>(jsonrespuesta);
-                    responsePaypal.Response = capture;
+                    ResponseCapture capture = JsonConvert.DeserializeObject<ResponseCapture>(jsonrespuesta);
+                    response_paypal.response = capture;
 
                 }
-                return responsePaypal;
+                return response_paypal;
             }
-        }
-
-        public async Task<Response_Paypal<Response_CheckOut>> crearSolicitud(CheckOut_Order.Checkout_Order oCheckoutOrder)
-        {
-            throw new NotImplementedException();
         }
     }
 }
