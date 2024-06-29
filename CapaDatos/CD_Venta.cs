@@ -1,8 +1,10 @@
 ﻿using CapaEntidades;
+using CapaEntidades.PayPal;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace CapaDatos
@@ -24,6 +26,7 @@ namespace CapaDatos
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cnx.Open();
+                    cmd.ExecuteNonQuery();
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
@@ -33,17 +36,19 @@ namespace CapaDatos
                             {
                                 FechaVenta = dr[0].ToString(),
                                 NombreCliente = dr[1].ToString(),
-                                Precio = Convert.ToDecimal(dr[2], new CultureInfo("es-PE")),
-                                Cantidad = Convert.ToInt32(dr[3]),
-                                Total = Convert.ToDecimal(dr[4], new CultureInfo("es-PE")),
+                                Nombre = dr[2].ToString(),
+                                Precio = Convert.ToDecimal(dr[3], new CultureInfo("es-PE")),
+                                Cantidad = Convert.ToInt32(dr[4]),
+                                Total = Convert.ToDecimal(dr[5], new CultureInfo("es-PE")),
                                 IdTransaccion = dr[5].ToString()
                             });
                         }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Error: {ex}");
                 listado = new List<Reporte>();
             }
 

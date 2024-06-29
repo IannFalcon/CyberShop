@@ -82,40 +82,38 @@
 
         var tabladata;
 
-        $(document).ready(function () {
+        $("#txtFecInicio").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+        $("#txtFecFin").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
 
-            $("#txtFecInicio").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
-            $("#txtFecFin").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+        // Historial de ventas
+        tabladata = $("#tabla_hventas").DataTable({
+            responsive: true,
+            ordering: true,
+            "ajax": {
+                url: '@Url.Action("ListarVentas", "Home")',
+                type: "GET",
+                dataType: "json",
+                data: function (data) {
 
-            // Historial de ventas
-            tabladata = $("#tabla_hventas").DataTable({
-                responsive: true,
-                ordering: true,
-                "ajax": {
-                    url: '@Url.Action("ListarVentas", "Home")',
-                    type: "GET",
-                    dataType: "json",
-                    data: function (data) {
-                        data.fechaini = $("#txtFecInicio").val();
-                        data.fechafin = $("#txtFecFin").val();
-                        data.idtransaccion = $("#txtTransaccion").val();
-                    }
-                },
-                "columns": [
-                    { "data": "FechaVenta" },
-                    { "data": "NombreCliente" },
-                    { "data": "Nombre" },
-                    { "data": "Precio" },
-                    { "data": "Cantidad" },
-                    { "data": "Total" },
-                    { "data": "IdTransaccion" }
-                ],
-                "language": {
-                    url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/es-MX.json'
-                },
-            });
-
+                    data.fechaini = $("#txtFecInicio").val();
+                    data.fechafin = $("#txtFecFin").val();
+                    data.idtransaccion = $("#txtTransaccion").val();
+                }
+            },
+            "columns": [
+                { "data": "FechaVenta" },
+                { "data": "NombreCliente" },
+                { "data": "Nombre" },
+                { "data": "Precio" },
+                { "data": "Cantidad" },
+                { "data": "Total" },
+                { "data": "IdTransaccion" }
+            ],
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/2.0.8/i18n/es-MX.json'
+            }
         });
+
 
         // Boton buscar
         $("#btnBuscar").on("click", function () {
