@@ -8,6 +8,10 @@
     <div class="row mt-5">
         <div class="col-sm-12">
 
+            <h1>Historial de compras:</h1>
+
+            <hr />
+
             @{ 
                 if(Model.Count > 0)
                 {
@@ -20,7 +24,7 @@
                                         <h6>ID TRANSACCION: @item.IdTransaccion</h6>
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
-                                                <thead>
+                                                <thead class="table bg-dark text-white">
                                                     <tr>
                                                         <th>Imagen</th>
                                                         <th>Producto</th>
@@ -32,7 +36,7 @@
                                                 <tbody class="bg-white">
                                                     <tr>
                                                         <td>
-                                                            <img class=" card-img-top mb-5 mb-md-0" src="data:image/@item.objProducto.Extension; base64,@item.objProducto.Base64" style="width:120px; height:120px" />
+                                                            <img class=" card-img-top mb-5 mb-md-0" src="data:image/@item.objProducto.Extension; base64,@item.objProducto.Base64" style="width:170px; height:120px" />
                                                         </td>
                                                         <td valign="middle">
                                                             @item.objProducto.Nombre

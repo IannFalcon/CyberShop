@@ -9,76 +9,50 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>CambiarClave</title>
-    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/login.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-1 rounded-lg mt-5">
-                                <div class="card-header bg-black text-white"><h3 class="text-center font-weight-light my-4">Cambiar contraseña</h3></div>
-                                <div class="card-body">
-                                    <form action="@Url.Action("CambiarClave", "Acceso")" method="post">
 
-                                        <input class="form-control" name="idusuario" value="@TempData["IdUsuario"]" type="hidden" />
+    <div class="contenedor">
+        <div class="contenedor_form">
+            <form action="@Url.Action("CambiarClave", "Acceso")" method="post">
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="claveactual" type="password" value="@ViewData["vclave"]" />
-                                            <label for="inputEmail">Contraseña actual</label>
-                                        </div>
+                <input class="form-control" name="idusuario" value="@TempData["IdUsuario"]" type="hidden" />
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="nuevaclave" type="password" />
-                                            <label for="inputEmail">Nueva contraseña</label>
-                                        </div>
+                <h1>CAMBIAR CONTRASEÑA</h1>
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" name="confirmarclave" type="password" />
-                                            <label for="inputPassword">Confirmar contraseña</label>
-                                        </div>
+                <div class="ctn_input">
+                    <label for="inputNowPassword">Ingresa tu contraseña actual:</label>
+                    <input id="inputNowPassword" name="claveactual" type="password" placeholder="Contraseña actual" />
+                </div>
 
-                                        @{
-                                            if (ViewBag.Error != null)
-                                            {
-                                                <div class="form-floating mb-3">
-                                                    <div class="alert alert-danger" role="alert">
-                                                        @ViewBag.Error
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
+                <div class="ctn_input">
+                    <label for="inputNewPassword">Ingresa tu nueva contraseña:</label>
+                    <input id="inputNewPassword" name="nuevaclave" type="password" placeholder="Contraseña nueva contraseña" />
+                </div>
 
-                                        <hr />
+                <div class="ctn_input">
+                    <label for="inputPassword">Confirmar contraseña:</label>
+                    <input id="inputPassword" name="confirmarclave" type="password" placeholder="Repetir nueva contraseña" />
+                </div>
 
-                                        <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
-                                            <a class="btn btn-primary" href="@Url.Action("Login", "Acceso")">Volver</a>
-                                            <button class="btn btn-success" type="submit">Cambiar contraseña</button>
-                                        </div>
-
-                                    </form>
-                                </div>
+                @{
+                    if (ViewBag.Error != null)
+                    {
+                        <div class="form-floating mb-3">
+                            <div class="ctn_error">
+                                @ViewBag.Error
                             </div>
                         </div>
-                    </div>
+                    }
+                }
+
+                <div class="ctn_button">
+                    <button type="submit">Cambiar contraseña</button>
+                    <a class="btn_volver" href="@Url.Action("Login", "Acceso")">Regresar</a>
                 </div>
-            </main>
-        </div>
-        <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+
+            </form>
         </div>
     </div>
 

@@ -3,6 +3,7 @@ using CapaNegocio;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.Services.Description;
 
 namespace AppProyectoEFSRTCyberShop.Controllers
 {
@@ -58,15 +59,20 @@ namespace AppProyectoEFSRTCyberShop.Controllers
 
             usuario = new CN_Usuarios().Listar().Where(u => u.IdUsuario == int.Parse(idusuario)).FirstOrDefault();
 
-            if(usuario.Clave != CN_Recursos.EncriptarClave(claveactual))
+            if (usuario.Clave != CN_Recursos.EncriptarClave(claveactual))
             {
                 TempData["IdUsuario"] = idusuario;
-
                 ViewBag.Error = "Contraseña Incorrecta";
                 return View();
-
-            } 
-            else if(nuevaclave != confirmarclave)
+            }
+            else if (string.IsNullOrEmpty(nuevaclave) || string.IsNullOrWhiteSpace(nuevaclave))
+            {
+                TempData["IdUsuario"] = idusuario;
+                ViewData["vclave"] = claveactual;
+                ViewBag.Error = "Su nueva contraseña no puede ser vacio";
+                return View();
+            }
+            else if (string.IsNullOrEmpty(confirmarclave) || string.IsNullOrWhiteSpace(confirmarclave) || nuevaclave != confirmarclave)
             {
                 TempData["IdUsuario"] = idusuario;
                 ViewData["vclave"] = claveactual;

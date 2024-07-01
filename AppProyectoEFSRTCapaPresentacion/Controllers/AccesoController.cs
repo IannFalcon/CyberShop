@@ -64,26 +64,17 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
             ViewData["Apellidos"] = string.IsNullOrEmpty(obj.Apellidos) ? "" : obj.Apellidos;
             ViewData["Correo"] = string.IsNullOrEmpty(obj.Correo) ? "" : obj.Correo;
 
-            if(obj.Clave !=  obj.ConfirmarClave) {
-
-                ViewBag.Error = "Las contraseñas no coinciden";
-                return View();
-            }
-
             resultado = new CN_Cliente().Registrar(obj, out Mensaje);
 
-            if (resultado > 0) {
-
+            if (resultado > 0) 
+            {
                 ViewBag.Error = null; 
                 return RedirectToAction("LoginCliente", "Acceso");
-
             }
             else
             {
-
                 ViewBag.Error = Mensaje;
                 return View();
-
             }
         }
 
@@ -98,6 +89,7 @@ namespace AppProyectoEFSRTCapaPresentacion.Controllers
                 ViewBag.Error = "No existe un cliente relacionado a este correo";
                 return View();
             }
+
             string mensaje = string.Empty;
             bool respuesta = new CN_Cliente().ReestablecerClave(cliente.IdCliente, correo, out mensaje);
 

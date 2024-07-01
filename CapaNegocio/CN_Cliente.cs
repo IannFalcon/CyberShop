@@ -29,6 +29,14 @@ namespace CapaNegocio
             {
                 Mensaje = "El correo no puede ser vacio";
             }
+            else if (string.IsNullOrEmpty(obj.Clave) || string.IsNullOrWhiteSpace(obj.Clave))
+            {
+                Mensaje = "Su contraseña no puede ser vacio";
+            }
+            else if (obj.Clave != obj.ConfirmarClave)
+            {
+                Mensaje = "Las contraseñas no coinciden";
+            }
 
             if (string.IsNullOrEmpty(Mensaje))
             {
@@ -58,7 +66,22 @@ namespace CapaNegocio
 
         public bool CambiarClave(int idcliente, string nuevaclave, out string Mensaje)
         {
-            return objCapaDatos.CambiarClave(idcliente, nuevaclave, out Mensaje);
+            Mensaje = string.Empty;
+
+            if (string.IsNullOrEmpty(nuevaclave) || string.IsNullOrWhiteSpace(nuevaclave))
+            {
+                Mensaje = "Su contraseña no puede ser vacio";
+            }
+
+            if (string.IsNullOrEmpty(Mensaje))
+            {
+                return objCapaDatos.CambiarClave(idcliente, nuevaclave, out Mensaje);
+            }
+            else
+            {
+                Mensaje = "Error al cambiar la clave";
+                return false;
+            }
         }
         
         public bool ReestablecerClave(int idcliente, string correo, out string Mensaje)

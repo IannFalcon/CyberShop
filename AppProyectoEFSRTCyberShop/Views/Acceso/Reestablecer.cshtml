@@ -8,66 +8,36 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Reestablecer</title>
-    <link href="~/Content/Site.css" rel="stylesheet" />
+    <title>Restablecer</title>
+    <link href="~/Content/login.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header bg-dark text-white"><h3 class="text-center font-weight-light my-4">Recuperar Contraseña</h3></div>
-                                <div class="card-body">
-                                    <div class="small mb-3 text-muted">Ingresa tu correo para enviarte una nueva contraseña.</div>
-                                    <form action="@Url.Action("Reestablecer", "Acceso")" method="post">
+    <div class="contenedor">
+        <div class="contenedor_form">
+            <form action="@Url.Action("Reestablecer", "Acceso")" method="post">
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputEmail" name="correo" type="email" autocomplete="off" />
-                                            <label for="inputEmail">Correo</label>
-                                        </div>
+                <h1>RECUPERAR CONTRASEÑA</h1>
 
-                                        @{
-                                            if (ViewBag.Error != null)
-                                            {
-                                                <div class="form-floating mb-3">
-                                                    <div class="alert alert-danger" role="alert">
-                                                        @ViewBag.Error
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-
-                                        <hr />
-
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="@Url.Action("Login", "Acceso")">Volver</a>
-                                            <button class="btn btn-primary" type="submit">Reestablecer contraseña</button>
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ctn_input">
+                    <label for="inputEmail">Ingresa tu correo:</label>
+                    <input id="inputEmail" name="correo" type="email" placeholder="Ejemplo@cybershop.com" />
                 </div>
-            </main>
-        </div>
-        <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
+
+                @{
+                    if (ViewBag.Error != null)
+                    {
+                        <div class="ctn_error">
+                            @ViewBag.Error
                         </div>
-                    </div>
+                    }
+                }
+
+                <div class="ctn_button">
+                    <button type="submit">Enviar correo</button>
+                    <a class="btn_volver" href="@Url.Action("Login", "Acceso")">Regresar</a>
                 </div>
-            </footer>
+
+            </form>
         </div>
     </div>
 

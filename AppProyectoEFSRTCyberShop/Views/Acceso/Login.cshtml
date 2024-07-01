@@ -9,69 +9,41 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Login</title>
-    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/login.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5">
-                            <div class="card shadow-lg border-1 rounded-lg mt-5">
-                                <div class="card-header bg-black text-white"><h3 class="text-center font-weight-light my-4">Login</h3></div>
-                                <div class="card-body">
-                                    <form action="@Url.Action("Login", "Acceso")" method="post">
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputEmail" name="correo" type="email" />
-                                            <label for="inputEmail">Email</label>
-                                        </div>
+    <div class="contenedor">
+        <div class="contenedor_form">
+            <form action="@Url.Action("Login", "Acceso")" method="post">
 
-                                        <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputPassword" name="clave" type="password" />
-                                            <label for="inputPassword">Contraseña</label>
-                                        </div>
+                <h1>LOGIN</h1>
 
-                                        @{
-                                            if (ViewBag.Error != null)
-                                            {
-                                                <div class="form-floating mb-3">
-                                                    <div class="alert alert-danger" role="alert">
-                                                        @ViewBag.Error
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-
-                                        <hr />
-
-                                        <div class="d-flex align-items-center justify-content-between mt-2 mb-0">
-                                            <a class="small" href="@Url.Action("Reestablecer", "Acceso")">¿Ovidaste tu contraseña?</a>
-                                            <button class="btn btn-success" type="submit">Iniciar Sesion</button>
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="ctn_input">
+                    <label for="inputEmail">Correo:</label>
+                    <input id="inputEmail" name="correo" type="email" placeholder="Ejemplo@cybershop.com" />
                 </div>
-            </main>
-        </div>
-        <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
+
+                <div class="ctn_input">
+                    <label for="inputPassword">Contraseña:</label>
+                    <input id="inputPassword" name="clave" type="password" placeholder="Ingresa tu contraseña" />
                 </div>
-            </footer>
+
+                @{
+                    if (ViewBag.Error != null)
+                    {
+                        <div class="ctn_error">
+                            @ViewBag.Error
+                        </div>
+                    }
+                }
+
+                <div class="ctn_button">
+                    <button type="submit">Iniciar Sesion</button>
+                    <a class="olvidaste_clave" href="@Url.Action("Reestablecer", "Acceso")">¿Olvidaste tu contraseña?</a>
+                </div>
+
+            </form>
         </div>
     </div>
 

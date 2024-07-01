@@ -3,10 +3,11 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/banner.css" rel="stylesheet" />
 }
 
 <!-- Header-->
-<header class="bg-dark py-5">
+<header class="banner">
     <div class="container px-4 px-lg-5 my-5 py-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">CyberShop</h1>
@@ -16,9 +17,13 @@
 </header>
 <!-- Section-->
 <section class="py-3">
-    <div class="container-fluid px-5 my-5">
+    
 
-        <div class="row">
+    <div class="container-fluid px-5">
+
+        <hr />
+
+        <div class="row py-3">
 
             <div class="col-sm-3">
 
@@ -64,8 +69,11 @@
             </div>
 
             <div class="col-sm-9">
-                <div id="contenedor_producto" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <!-- Aqui se insertaran los productos existentes -->
+                <div class="container">
+                    <h2 class="text-center mb-5"><b>NUESTROS PRODUCTOS</b></h2>
+                    <div id="contenedor_producto" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,37 +107,35 @@
                     $.each(response.data, function (i, element) {
 
                         $("<div>").addClass("col mb-5").append(
-                            $("<div>").addClass("card h-100").append(
+                            $("<div>").addClass("card h-100 text-center").append(
 
                                 // Imagen
-                                $("<img>").addClass("card-img-top p-4").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                $("<div>").addClass("d-flex justify-content-center align-items-center").css({ "height": "200px" }).append(
+                                    $("<img>").addClass("card-img-top p-4")
+                                        .attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 })
+                                        .css({ "max-width": "200px", "max-height": "200px" })
+                                ),
 
                                 // Descripcion producto
                                 $("<div>").addClass("card-body px-4 py-2 d-flex flex-column").append(
-
-                                    $("<div>").addClass("text-center mb-auto").append(
-
-                                        $("<h5>").addClass("fw-bolder").text(element.Nombre),
-
+                                    $("<div>").addClass("text-center mb-auto d-flex flex-column justify-content-center align-items-center").append(
+                                        $("<h5>").addClass("fw-bolder").text(element.Nombre)
                                     ),
                                     $("<p>").addClass("mt-auto mb-4 text-center price").text("S/ " + element.Precio.toFixed(2)),
 
                                     // Botones
                                     $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent text-center").append(
-
                                         @if (Session["Cliente"] != null) {
-
                                             @:$("<button>").addClass("btn btn-outline-warning mt-auto mb-2 agregarcarrito").data("idproducto", element.IdProducto).append($("<i>").addClass("fas fa-cart-plus me-2"), "Agregar al carrito"),
-
                                         }
-
                                         $("<a>").addClass("btn btn-outline-dark mt-auto")
                                             .attr({ "href": '@Url.Action("DetalleProducto","Tienda")' + "?idproducto=" + element.IdProducto })
-                                            .text("Ver detalle")
+                                            .append($("<i>").addClass("fas fa-list me-2"), " Ver detalle")
                                     )
                                 )
                             )
-                        ).appendTo("#contenedor_producto")
+                        ).appendTo("#contenedor_producto");
+
                     })
                 },
                 beforeSend: function () {

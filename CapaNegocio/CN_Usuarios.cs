@@ -107,7 +107,7 @@ namespace CapaNegocio
             if (resultado)
             {
                 string asunto = "Reestablecer Contraseña - CyberShop";
-                string mensaje_correo = "<h3>Su cuenta fue reestablecida correctamente</h3>" +
+                string mensaje_correo = "<h3>Su contraseña fue reestablecida correctamente</h3>" +
                                         "</br>" +
                                         $"<p>Su nueva contraseña para acceder es: {nuevaclave} </p>";
 

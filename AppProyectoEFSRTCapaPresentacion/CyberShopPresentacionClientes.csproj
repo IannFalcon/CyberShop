@@ -131,6 +131,7 @@
   <ItemGroup>
     <Content Include="Content\all.css" />
     <Content Include="Content\all.min.css" />
+    <Content Include="Content\banner.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -149,10 +150,15 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\brands.css" />
     <Content Include="Content\brands.min.css" />
+    <Content Include="Content\fondo-banner.jpeg" />
+    <Content Include="Content\fondo-login-cliente.jpg" />
+    <Content Include="Content\fondo-registrar-cliente.jpg" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\fontawesome.min.css" />
+    <Content Include="Content\login.css" />
+    <Content Include="Content\registrar-cliente.css" />
     <Content Include="Content\regular.css" />
     <Content Include="Content\regular.min.css" />
     <Content Include="Content\solid.css" />
